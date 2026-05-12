@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>parallel.kevin.energy — three pieces on a new category in AI infrastructure</title>
+<meta name="description" content="An essay, a workflow demo, and a comparative battlecard. By Kevin Nguyen, May 2026." />
+<meta name="author" content="Kevin Nguyen" />
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='40' fill='%23d4a574'/%3E%3C/svg%3E" />
+<style>
+  :root {
+    --bg: #0a0a0b;
+    --bg-elev: #131316;
+    --rule: #1f1f24;
+    --ink: #e8e8ea;
+    --ink-dim: #9c9ca3;
+    --ink-muted: #6c6c74;
+    --accent: #d4a574;
+    --accent-dim: #8a6d4d;
+    --serif: ui-serif, 'Iowan Old Style', 'Apple Garamond', Georgia, Cambria, 'Times New Roman', serif;
+    --sans: ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Inter, sans-serif;
+  }
+  * { box-sizing: border-box; }
+  html, body {
+    margin: 0;
+    padding: 0;
+    background: var(--bg);
+    color: var(--ink);
+    font-family: var(--serif);
+    font-size: 18px;
+    line-height: 1.7;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+  .container { max-width: 760px; margin: 0 auto; padding: 64px 24px 96px; }
+
+  .masthead {
+    font-family: var(--sans);
+    font-size: 12px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 56px;
+  }
+
+  h1 {
+    font-family: var(--serif);
+    font-weight: 500;
+    font-size: clamp(32px, 5.5vw, 48px);
+    line-height: 1.1;
+    letter-spacing: -0.015em;
+    margin: 0 0 28px;
+    max-width: 18ch;
+  }
+  .deck {
+    font-family: var(--serif);
+    font-style: italic;
+    font-size: 20px;
+    line-height: 1.55;
+    color: var(--ink-dim);
+    max-width: 56ch;
+    margin: 0 0 56px;
+  }
+  .byline {
+    font-family: var(--sans);
+    font-size: 13px;
+    color: var(--ink-muted);
+    letter-spacing: 0.02em;
+    margin-bottom: 64px;
+  }
+  .byline strong { color: var(--ink-dim); font-weight: 500; }
+  .byline a { color: var(--accent); text-decoration: none; border-bottom: 1px solid var(--accent-dim); }
+
+  /* Cards */
+  .cards {
+    display: grid;
+    gap: 16px;
+    margin-top: 24px;
+  }
+  .card {
+    display: block;
+    padding: 28px 28px 24px;
+    background: var(--bg-elev);
+    border: 1px solid var(--rule);
+    border-radius: 6px;
+    text-decoration: none;
+    color: var(--ink);
+    transition: border-color 160ms ease, transform 160ms ease;
+  }
+  .card[data-status="live"]:hover {
+    border-color: var(--accent-dim);
+    transform: translateY(-1px);
+  }
+  .card[data-status="soon"] {
+    opacity: 0.55;
+    cursor: not-allowed;
+  }
+  .card-meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 14px;
+    font-family: var(--sans);
+    font-size: 11px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+  }
+  .card-num { color: var(--accent); }
+  .card-status {
+    color: var(--ink-muted);
+    padding: 2px 8px;
+    border: 1px solid var(--rule);
+    border-radius: 99px;
+  }
+  .card[data-status="live"] .card-status { color: #79c590; border-color: #2a4a35; }
+  .card-title {
+    font-family: var(--serif);
+    font-size: 24px;
+    font-weight: 500;
+    line-height: 1.25;
+    margin: 0 0 10px;
+    color: var(--ink);
+  }
+  .card-blurb {
+    font-family: var(--serif);
+    font-size: 16px;
+    line-height: 1.55;
+    color: var(--ink-dim);
+    margin: 0;
+  }
+
+  /* Context section */
+  .context {
+    margin-top: 80px;
+    padding-top: 32px;
+    border-top: 1px solid var(--rule);
+    font-family: var(--sans);
+    font-size: 13px;
+    line-height: 1.7;
+    color: var(--ink-muted);
+  }
+  .context p { margin: 0 0 12px; max-width: 60ch; }
+  .context a { color: var(--ink-dim); text-decoration: none; border-bottom: 1px solid transparent; }
+  .context a:hover { color: var(--accent); border-bottom-color: var(--accent-dim); }
+
+  @media (max-width: 640px) {
+    .container { padding: 32px 20px 64px; }
+    .card { padding: 22px 20px 20px; }
+  }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <div class="masthead">parallel.kevin.energy</div>
+
+  <h1>Three pieces on a new category in AI infrastructure.</h1>
+  <p class="deck">An essay, a workflow demo, and a comparative battlecard. Built around one bet: that <em>web infrastructure for agents</em> is becoming a distinct product category, and that the team naming it most clearly will own it.</p>
+
+  <div class="byline">By <strong>Kevin Nguyen</strong> · May 2026 · <a href="https://kevin.energy">kevin.energy</a> · <a href="https://github.com/kevinnguyen805/parallel-tpmm-demos">source</a></div>
+
+  <div class="cards">
+
+    <a class="card" data-status="live" href="essay/">
+      <div class="card-meta">
+        <span class="card-num">01 · Essay</span>
+        <span class="card-status">Live</span>
+      </div>
+      <h2 class="card-title">The Agent Loop Needs Plumbing, Not Snippets</h2>
+      <p class="card-blurb">Why "AI search" APIs are still search engines wearing different clothes — and what a real infrastructure category for agents looks like when you build it on purpose.</p>
+    </a>
+
+    <a class="card" data-status="soon" href="#">
+      <div class="card-meta">
+        <span class="card-num">02 · Demo</span>
+        <span class="card-status">Coming soon</span>
+      </div>
+      <h2 class="card-title">A Day in the Life of an Agent</h2>
+      <p class="card-blurb">One workflow — find, enrich, watch, ground — wired end-to-end across four Parallel APIs. The five primitives from the essay, embodied in a single pipeline.</p>
+    </a>
+
+    <a class="card" data-status="soon" href="#">
+      <div class="card-meta">
+        <span class="card-num">03 · Battlecard</span>
+        <span class="card-status">Coming soon</span>
+      </div>
+      <h2 class="card-title">Same Task, Four APIs, Audited</h2>
+      <p class="card-blurb">A controlled head-to-head on a real agentic research task. Citation density, factual accuracy, hallucination rate, latency, cost — and which API tells you when it's wrong.</p>
+    </a>
+
+  </div>
+
+  <div class="context">
+    <p>I made this while preparing for a <a href="https://jobs.ashbyhq.com/parallel/e4f2bdcb-5cd1-4643-8e93-3e165fba88d8/application">Technical Product Marketing Manager interview at Parallel</a>. The goal was to build the artifacts I'd ship in the first week of the job, before the interview, so the conversation could start a layer up.</p>
+    <p>None of this is endorsed by Parallel. The views are mine. The product analysis is from public docs, public benchmarks, and hands-on use of the APIs.</p>
+  </div>
+
+</div>
+</body>
+</html>
