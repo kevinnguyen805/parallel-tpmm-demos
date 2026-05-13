@@ -175,8 +175,9 @@ test('feature: demo has API request examples (POST + endpoint)', () => {
 
 test('feature: demo final artifact has at least 3 cited claims', () => {
   const html = read('demo/index.html');
-  const artifactBlock = html.match(/class="artifact"[\s\S]*?<\/div>\s*<\/div>/);
-  assert(artifactBlock, 'No .artifact block found');
+  // The artifact is the .letter block (renamed from .artifact in the redesign).
+  const artifactBlock = html.match(/class="letter">[\s\S]*?class="citations"/);
+  assert(artifactBlock, 'No .letter block found');
   const cites = (artifactBlock[0].match(/class="cite"/g) || []).length;
   assert(cites >= 3, `Expected ≥3 citations in final artifact, found ${cites}`);
 });
@@ -242,9 +243,63 @@ test('cross: root index marks demo + battlecard Live (not Coming Soon)', () => {
   const html = read('index.html');
   assert(!/>\s*Coming soon\s*</i.test(html),
     'Root index still has "Coming soon" status — should be Live');
-  // Count card elements, not CSS selectors.
-  const liveCards = (html.match(/<a class="card" data-status="live"/g) || []).length;
+  // Permissive class match — design system may add extras like "entry card".
+  const liveCards = (html.match(/<a\s+class="[^"]*\bcard\b[^"]*"\s+data-status="live"/g) || []).length;
   assert(liveCards === 3, `Expected 3 Live card elements on landing, found ${liveCards}`);
+});
+
+// ─── Design-language compliance ──────────────────────────────────────
+test('design: all 4 pages reference Newsreader serif token', () => {
+  const pages = ['index.html', 'essay/index.html', 'demo/index.html', 'battlecard/index.html'];
+  for (const p of pages) {
+    const html = read(p);
+    assert(/Newsreader/i.test(html), `${p} missing Newsreader font reference`);
+  }
+});
+
+test('design: all 4 pages reference Departure Mono', () => {
+  const pages = ['index.html', 'essay/index.html', 'demo/index.html', 'battlecard/index.html'];
+  for (const p of pages) {
+    const html = read(p);
+    assert(/Departure Mono/i.test(html), `${p} missing Departure Mono font reference`);
+  }
+});
+
+test('design: all 4 pages use cobalt accent (#0a3bd6 or oklch token)', () => {
+  const pages = ['index.html', 'essay/index.html', 'demo/index.html', 'battlecard/index.html'];
+  for (const p of pages) {
+    const html = read(p);
+    const hasCobalt = /#0a3bd6/i.test(html) || /oklch\(50\.58%\s*0\.2886\s*264\.84\)/i.test(html);
+    assert(hasCobalt, `${p} missing cobalt accent token`);
+  }
+});
+
+test('design: all 4 pages end with ASCII END marker', () => {
+  const pages = ['index.html', 'essay/index.html', 'demo/index.html', 'battlecard/index.html'];
+  for (const p of pages) {
+    const html = read(p);
+    assert(/end-marker/i.test(html) && /END/.test(html),
+      `${p} missing ASCII END marker`);
+  }
+});
+
+test('design: pages use paper-sheet container (.sheet) and prose max-width pattern', () => {
+  const pages = ['index.html', 'essay/index.html', 'demo/index.html', 'battlecard/index.html'];
+  for (const p of pages) {
+    const html = read(p);
+    assert(/class="sheet"/.test(html), `${p} missing .sheet container`);
+    assert(/class="prose"/.test(html), `${p} missing .prose inner column`);
+  }
+});
+
+test('design: no orphan dark-theme tokens left over (#0a0a0b, #d4a574)', () => {
+  const pages = ['index.html', 'essay/index.html', 'demo/index.html', 'battlecard/index.html'];
+  for (const p of pages) {
+    const html = read(p);
+    // Old amber accent and dark background must be gone from every page.
+    assert(!/#d4a574/i.test(html), `${p} still references old amber accent #d4a574`);
+    assert(!/#0a0a0b/i.test(html), `${p} still references old near-black bg #0a0a0b`);
+  }
 });
 
 // ─── E2E: internal link integrity ────────────────────────────────────

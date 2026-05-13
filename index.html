@@ -6,195 +6,250 @@
 <title>parallel.kevin.energy — three pieces on a new category in AI infrastructure</title>
 <meta name="description" content="An essay, a workflow demo, and a comparative battlecard. By Kevin Nguyen, May 2026." />
 <meta name="author" content="Kevin Nguyen" />
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='40' fill='%23d4a574'/%3E%3C/svg%3E" />
+<meta property="og:title" content="parallel.kevin.energy" />
+<meta property="og:description" content="An essay, a workflow demo, and a comparative battlecard on a new category in AI infrastructure." />
+<meta property="og:type" content="website" />
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect x='15' y='15' width='70' height='70' fill='%230a3bd6'/%3E%3C/svg%3E" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/departure-mono/index.css" />
 <style>
   :root {
-    --bg: #0a0a0b;
-    --bg-elev: #131316;
-    --rule: #1f1f24;
-    --ink: #e8e8ea;
-    --ink-dim: #9c9ca3;
-    --ink-muted: #6c6c74;
-    --accent: #d4a574;
-    --accent-dim: #8a6d4d;
-    --serif: ui-serif, 'Iowan Old Style', 'Apple Garamond', Georgia, Cambria, 'Times New Roman', serif;
-    --sans: ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Inter, sans-serif;
+    --bg: #fbfbfb;
+    --paper: #ffffff;
+    --ink: #181b23;
+    --marg: rgba(0, 0, 0, 0.50);
+    --hair: rgba(0, 0, 0, 0.10);
+    --cobalt: #0a3bd6;
+    --cobalt-underline: #5d83ee;
+    --serif: "New York", "Newsreader", "Iowan Old Style", Georgia, Cambria, "Times New Roman", serif;
+    --mono: "Departure Mono", "JetBrains Mono", ui-monospace, "SF Mono", Menlo, monospace;
+  }
+  @supports (color: oklch(13% 0.028 261)) {
+    :root {
+      --ink: oklch(13% 0.028 261.692);
+      --cobalt: oklch(50.58% 0.2886 264.84);
+      --cobalt-underline: oklch(67.84% 0.1828 263.71);
+    }
   }
   * { box-sizing: border-box; }
-  html, body {
-    margin: 0;
-    padding: 0;
-    background: var(--bg);
-    color: var(--ink);
+  html { font-size: 17px; scroll-behavior: smooth; }
+  body {
+    margin: 0; padding: 40px 24px;
+    background: var(--bg); color: var(--ink);
     font-family: var(--serif);
-    font-size: 18px;
-    line-height: 1.7;
+    font-feature-settings: "kern", "liga", "calt";
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-  }
-  .container { max-width: 760px; margin: 0 auto; padding: 64px 24px 96px; }
-
-  .masthead {
-    font-family: var(--sans);
-    font-size: 12px;
-    letter-spacing: 0.22em;
-    text-transform: uppercase;
-    color: var(--accent);
-    margin-bottom: 56px;
+    text-rendering: optimizeLegibility;
   }
 
-  h1 {
-    font-family: var(--serif);
-    font-weight: 500;
-    font-size: clamp(32px, 5.5vw, 48px);
-    line-height: 1.1;
-    letter-spacing: -0.015em;
-    margin: 0 0 28px;
-    max-width: 18ch;
+  .sheet {
+    max-width: 64rem; margin: 0 auto;
+    background: var(--paper); border-radius: 2px;
+    padding: 80px 64px;
+    box-shadow:
+      0 1px 4px 1px rgba(0, 0, 0, 0.05),
+      0 1px 1px 0 rgba(0, 0, 0, 0.20),
+      0 -1px 1px 1px #fff inset;
   }
-  .deck {
-    font-family: var(--serif);
-    font-style: italic;
-    font-size: 20px;
-    line-height: 1.55;
-    color: var(--ink-dim);
-    max-width: 56ch;
-    margin: 0 0 56px;
+  .prose { max-width: 36rem; margin: 0 auto; }
+
+  .top-ribbon {
+    display: flex; justify-content: space-between; align-items: center;
+    margin-bottom: 4rem;
+    font-family: var(--mono); font-size: 0.625rem;
+    text-transform: uppercase; letter-spacing: 0.12em; color: var(--marg);
   }
+  .top-ribbon span.host { color: var(--cobalt); letter-spacing: 0.14em; }
+
+  header.chapter { text-align: center; margin-bottom: 2.5rem; }
+  h1.chapter-title {
+    font-family: var(--serif); font-weight: 500;
+    font-size: 2.25rem; line-height: 1.15;
+    letter-spacing: -0.025em; text-wrap: pretty;
+    color: rgba(0, 0, 0, 0.82); margin: 0 0 1rem;
+  }
+  .dek {
+    font-family: var(--serif); font-style: italic;
+    font-size: 0.875rem; line-height: 1.7; color: #444;
+    max-width: 36rem; margin: 0 auto 1.5rem;
+  }
+  .dek em { font-style: italic; color: var(--ink); }
   .byline {
-    font-family: var(--sans);
-    font-size: 13px;
-    color: var(--ink-muted);
-    letter-spacing: 0.02em;
-    margin-bottom: 64px;
+    font-family: var(--mono); font-size: 0.625rem;
+    text-transform: uppercase; letter-spacing: 0.12em; color: var(--marg);
   }
-  .byline strong { color: var(--ink-dim); font-weight: 500; }
-  .byline a { color: var(--accent); text-decoration: none; border-bottom: 1px solid var(--accent-dim); }
+  .byline strong { color: var(--ink); font-weight: 500; }
+  .byline a { color: var(--marg); text-decoration-color: var(--hair); }
+  .byline a:hover { color: var(--cobalt); text-decoration-color: var(--cobalt-underline); }
 
-  /* Cards */
-  .cards {
-    display: grid;
-    gap: 16px;
-    margin-top: 24px;
+  .rule-pinch {
+    text-align: center; margin: 2rem 0 1.5rem;
+    font-family: var(--mono); font-size: 0.5rem;
+    letter-spacing: 0.4em; color: rgba(0, 0, 0, 0.25);
   }
-  .card {
+
+  /* TOC entries */
+  .toc { margin-top: 2rem; }
+  .entry {
     display: block;
-    padding: 28px 28px 24px;
-    background: var(--bg-elev);
-    border: 1px solid var(--rule);
-    border-radius: 6px;
-    text-decoration: none;
+    padding: 1.75rem 0;
+    border-top: 1px solid var(--hair);
     color: var(--ink);
-    transition: border-color 160ms ease, transform 160ms ease;
+    text-decoration: none;
   }
-  .card[data-status="live"]:hover {
-    border-color: var(--accent-dim);
-    transform: translateY(-1px);
-  }
-  .card[data-status="soon"] {
-    opacity: 0.55;
-    cursor: not-allowed;
-  }
-  .card-meta {
+  .entry:last-child { border-bottom: 1px solid var(--hair); }
+  .entry-head {
     display: flex;
     justify-content: space-between;
-    align-items: center;
-    margin-bottom: 14px;
-    font-family: var(--sans);
-    font-size: 11px;
-    letter-spacing: 0.18em;
+    align-items: baseline;
+    margin-bottom: 0.6rem;
+    font-family: var(--mono);
+    font-size: 0.625rem;
+    text-transform: uppercase;
+    letter-spacing: 0.16em;
+    color: var(--cobalt);
+  }
+  .entry-status {
+    color: var(--marg); letter-spacing: 0.12em;
+  }
+  .entry-title {
+    font-family: var(--serif);
+    font-size: 1.125rem; line-height: 1.35;
+    font-weight: 500; letter-spacing: -0.015em;
+    color: var(--ink); margin: 0 0 0.5rem;
+    text-wrap: pretty;
+  }
+  .entry-blurb {
+    font-family: var(--serif); font-size: 0.8125rem;
+    line-height: 1.85; color: var(--ink);
+    margin: 0 0 0.75rem;
+    text-align: justify; hyphens: auto;
+  }
+  .entry-link {
+    font-family: var(--mono); font-size: 0.625rem;
+    text-transform: uppercase; letter-spacing: 0.14em;
+    color: var(--cobalt);
+    text-decoration: underline;
+    text-decoration-style: dotted;
+    text-decoration-color: var(--cobalt-underline);
+    text-decoration-thickness: 1px;
+    text-underline-offset: 3px;
+    text-decoration-skip-ink: all;
+  }
+  /* Tests look for class="card" data-status="live" — preserve hooks */
+  .card[data-status="soon"] .entry-link { color: var(--marg); }
+
+  /* Context — bottom prose */
+  .context {
+    margin: 4rem 0 0;
+    padding-top: 2rem;
+    border-top: 1px solid var(--hair);
+    font-family: var(--mono); font-size: 0.625rem;
+    text-transform: uppercase; letter-spacing: 0.10em;
+    color: var(--marg); line-height: 1.9;
+  }
+  .context p { margin: 0 0 0.75rem; }
+  .context p:last-child { margin-bottom: 0; }
+  .context a { color: var(--marg); text-decoration-color: var(--hair); }
+  .context a:hover { color: var(--cobalt); text-decoration-color: var(--cobalt-underline); }
+
+  footer.colophon {
+    margin-top: 3rem; padding-top: 1.5rem;
+    border-top: 1px solid var(--hair);
+    font-family: var(--mono); font-size: 0.625rem;
+    text-transform: uppercase; letter-spacing: 0.12em;
+    color: var(--marg); line-height: 1.8; text-align: center;
+  }
+  footer.colophon a { color: var(--marg); text-decoration-color: var(--hair); }
+  footer.colophon a:hover { color: var(--cobalt); text-decoration-color: var(--cobalt-underline); }
+
+  .end-marker {
+    text-align: center; font-family: var(--mono);
+    font-size: 0.625rem; letter-spacing: 0.35em;
+    color: rgba(0, 0, 0, 0.25); margin: 4rem 0 0;
     text-transform: uppercase;
   }
-  .card-num { color: var(--accent); }
-  .card-status {
-    color: var(--ink-muted);
-    padding: 2px 8px;
-    border: 1px solid var(--rule);
-    border-radius: 99px;
-  }
-  .card[data-status="live"] .card-status { color: #79c590; border-color: #2a4a35; }
-  .card-title {
-    font-family: var(--serif);
-    font-size: 24px;
-    font-weight: 500;
-    line-height: 1.25;
-    margin: 0 0 10px;
-    color: var(--ink);
-  }
-  .card-blurb {
-    font-family: var(--serif);
-    font-size: 16px;
-    line-height: 1.55;
-    color: var(--ink-dim);
-    margin: 0;
+
+  @media (max-width: 720px) {
+    body { padding: 16px 12px; }
+    .sheet { padding: 48px 24px; }
+    h1.chapter-title { font-size: 1.75rem; }
+    .top-ribbon { margin-bottom: 2.5rem; }
   }
 
-  /* Context section */
-  .context {
-    margin-top: 80px;
-    padding-top: 32px;
-    border-top: 1px solid var(--rule);
-    font-family: var(--sans);
-    font-size: 13px;
-    line-height: 1.7;
-    color: var(--ink-muted);
-  }
-  .context p { margin: 0 0 12px; max-width: 60ch; }
-  .context a { color: var(--ink-dim); text-decoration: none; border-bottom: 1px solid transparent; }
-  .context a:hover { color: var(--accent); border-bottom-color: var(--accent-dim); }
-
-  @media (max-width: 640px) {
-    .container { padding: 32px 20px 64px; }
-    .card { padding: 22px 20px 20px; }
+  @media print {
+    body { background: white; padding: 0; }
+    .sheet { box-shadow: none; padding: 0; max-width: none; }
+    .top-ribbon, footer.colophon { display: none; }
   }
 </style>
 </head>
 <body>
-<div class="container">
+<div class="sheet">
+  <div class="prose">
 
-  <div class="masthead">parallel.kevin.energy</div>
+    <div class="top-ribbon">
+      <span class="host">parallel.kevin.energy</span>
+      <span>Index · Three Chapters</span>
+    </div>
 
-  <h1>Three pieces on a new category in AI infrastructure.</h1>
-  <p class="deck">An essay, a workflow demo, and a comparative battlecard. Built around one bet: that <em>web infrastructure for agents</em> is becoming a distinct product category, and that the team naming it most clearly will own it.</p>
+    <header class="chapter">
+      <h1 class="chapter-title">Three pieces on a new category in AI infrastructure</h1>
+      <p class="dek">An essay, a workflow demo, and a comparative battlecard. Built around one bet: that <em>web infrastructure for agents</em> is becoming a distinct product category, and that the team naming it most clearly will own it.</p>
+      <div class="byline">By <strong>Kevin Nguyen</strong> &nbsp;·&nbsp; May 2026 &nbsp;·&nbsp; <a href="https://kevin.energy">kevin.energy</a> &nbsp;·&nbsp; <a href="https://github.com/kevinnguyen805/parallel-tpmm-demos">source</a></div>
+    </header>
 
-  <div class="byline">By <strong>Kevin Nguyen</strong> · May 2026 · <a href="https://kevin.energy">kevin.energy</a> · <a href="https://github.com/kevinnguyen805/parallel-tpmm-demos">source</a></div>
+    <div class="rule-pinch">·   ·   ·</div>
 
-  <div class="cards">
+    <div class="toc">
 
-    <a class="card" data-status="live" href="essay/">
-      <div class="card-meta">
-        <span class="card-num">01 · Essay</span>
-        <span class="card-status">Live</span>
-      </div>
-      <h2 class="card-title">The Agent Loop Needs Plumbing, Not Snippets</h2>
-      <p class="card-blurb">Why "AI search" APIs are still search engines wearing different clothes — and what a real infrastructure category for agents looks like when you build it on purpose.</p>
-    </a>
+      <a class="entry card" data-status="live" href="essay/">
+        <div class="entry-head">
+          <span>Chapter 01 · Essay</span>
+          <span class="entry-status">Live · ~5 min</span>
+        </div>
+        <h2 class="entry-title">The Agent Loop Needs Plumbing, Not Snippets</h2>
+        <p class="entry-blurb">Why "AI search" APIs are still search engines wearing different clothes — and what a real infrastructure category for agents looks like when you build it on purpose. Five primitives, one trust layer, one missing word.</p>
+        <span class="entry-link">Read the essay →</span>
+      </a>
 
-    <a class="card" data-status="live" href="demo/">
-      <div class="card-meta">
-        <span class="card-num">02 · Demo</span>
-        <span class="card-status">Live</span>
-      </div>
-      <h2 class="card-title">From Brief to Outreach: A Workflow Wired in Public</h2>
-      <p class="card-blurb">One workflow — source, enrich, watch, ground — wired end-to-end across four Parallel APIs. The five primitives from the essay, embodied in a single traced pipeline.</p>
-    </a>
+      <a class="entry card" data-status="live" href="demo/">
+        <div class="entry-head">
+          <span>Chapter 02 · Demo</span>
+          <span class="entry-status">Live · ~7 min</span>
+        </div>
+        <h2 class="entry-title">From Brief to Outreach: A Workflow Wired in Public</h2>
+        <p class="entry-blurb">One workflow — source, enrich, watch, ground — wired end-to-end across four Parallel APIs, reconstructed against Sierra's $950M Series E announced May 4. The five primitives from the essay, embodied in a single traced pipeline.</p>
+        <span class="entry-link">Read the demo →</span>
+      </a>
 
-    <a class="card" data-status="live" href="battlecard/">
-      <div class="card-meta">
-        <span class="card-num">03 · Battlecard</span>
-        <span class="card-status">Live</span>
-      </div>
-      <h2 class="card-title">Same Task, Four APIs, Audited</h2>
-      <p class="card-blurb">A comparative read on four agentic-research APIs against six dimensions that matter in production — and the five methodology gaps a TPMM would close in their first month on the job.</p>
-    </a>
+      <a class="entry card" data-status="live" href="battlecard/">
+        <div class="entry-head">
+          <span>Chapter 03 · Battlecard</span>
+          <span class="entry-status">Live · ~6 min</span>
+        </div>
+        <h2 class="entry-title">Same Task, Four APIs, Audited</h2>
+        <p class="entry-blurb">A comparative read on four agentic-research APIs against six dimensions that matter in production — and the five methodology gaps a TPMM would close in their first month on the job.</p>
+        <span class="entry-link">Read the battlecard →</span>
+      </a>
+
+    </div>
+
+    <div class="context">
+      <p>Made while preparing for a <a href="https://jobs.ashbyhq.com/parallel/e4f2bdcb-5cd1-4643-8e93-3e165fba88d8/application">Technical Product Marketing Manager interview at Parallel</a>. The goal was to build the artifacts I'd ship in the first week of the job, before the interview, so the conversation could start a layer up.</p>
+      <p>None of this is endorsed by Parallel. The views are mine. The product analysis is from public docs, public benchmarks, and hands-on use of the APIs.</p>
+    </div>
+
+    <footer class="colophon">
+      <div>© <a href="https://kevin.energy">Kevin Nguyen</a>, May 2026 · Source on <a href="https://github.com/kevinnguyen805/parallel-tpmm-demos">GitHub</a></div>
+    </footer>
+
+    <div class="end-marker">╌╌&nbsp;&nbsp;END&nbsp;&nbsp;╌╌</div>
 
   </div>
-
-  <div class="context">
-    <p>I made this while preparing for a <a href="https://jobs.ashbyhq.com/parallel/e4f2bdcb-5cd1-4643-8e93-3e165fba88d8/application">Technical Product Marketing Manager interview at Parallel</a>. The goal was to build the artifacts I'd ship in the first week of the job, before the interview, so the conversation could start a layer up.</p>
-    <p>None of this is endorsed by Parallel. The views are mine. The product analysis is from public docs, public benchmarks, and hands-on use of the APIs.</p>
-  </div>
-
 </div>
 </body>
 </html>

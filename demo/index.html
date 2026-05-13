@@ -9,377 +9,380 @@
 <meta property="og:title" content="From Brief to Outreach: A Workflow Wired in Public" />
 <meta property="og:description" content="An agent workflow wiring four Parallel APIs against a real, recent funding announcement." />
 <meta property="og:type" content="article" />
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='40' fill='%23d4a574'/%3E%3C/svg%3E" />
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect x='15' y='15' width='70' height='70' fill='%230a3bd6'/%3E%3C/svg%3E" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/departure-mono/index.css" />
 <style>
   :root {
-    --bg: #0a0a0b;
-    --bg-elev: #131316;
-    --bg-code: #0e0e11;
-    --rule: #1f1f24;
-    --rule-warm: #2d251a;
-    --ink: #e8e8ea;
-    --ink-dim: #9c9ca3;
-    --ink-muted: #6c6c74;
-    --accent: #d4a574;
-    --accent-dim: #8a6d4d;
-    --good: #79c590;
-    --note: #8aa5d4;
-    --serif: ui-serif, 'Iowan Old Style', 'Apple Garamond', Georgia, Cambria, 'Times New Roman', serif;
-    --sans: ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Inter, sans-serif;
-    --mono: ui-monospace, 'SF Mono', Menlo, Monaco, Consolas, monospace;
+    --bg: #fbfbfb;
+    --paper: #ffffff;
+    --ink: #181b23;
+    --marg: rgba(0, 0, 0, 0.50);
+    --hair: rgba(0, 0, 0, 0.10);
+    --code-bg: rgba(0, 0, 0, 0.025);
+    --code-outline: rgba(0, 0, 0, 0.08);
+    --cobalt: #0a3bd6;
+    --cobalt-underline: #5d83ee;
+    --serif: "New York", "Newsreader", "Iowan Old Style", Georgia, Cambria, "Times New Roman", serif;
+    --mono: "Departure Mono", "JetBrains Mono", ui-monospace, "SF Mono", Menlo, monospace;
+  }
+  @supports (color: oklch(13% 0.028 261)) {
+    :root {
+      --ink: oklch(13% 0.028 261.692);
+      --cobalt: oklch(50.58% 0.2886 264.84);
+      --cobalt-underline: oklch(67.84% 0.1828 263.71);
+    }
   }
   * { box-sizing: border-box; }
-  html, body {
-    margin: 0; padding: 0;
-    background: var(--bg);
-    color: var(--ink);
+  html { font-size: 17px; scroll-behavior: smooth; }
+  body {
+    margin: 0; padding: 40px 24px;
+    background: var(--bg); color: var(--ink);
     font-family: var(--serif);
-    font-size: 18px;
-    line-height: 1.7;
+    font-feature-settings: "kern", "liga", "calt";
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
   }
-  .container { max-width: 760px; margin: 0 auto; padding: 64px 24px 96px; }
 
-  nav.top {
-    font-family: var(--sans);
-    font-size: 13px;
-    color: var(--ink-muted);
-    letter-spacing: 0.02em;
-    margin-bottom: 64px;
+  .sheet {
+    max-width: 64rem; margin: 0 auto;
+    background: var(--paper); border-radius: 2px;
+    padding: 80px 64px;
+    box-shadow:
+      0 1px 4px 1px rgba(0, 0, 0, 0.05),
+      0 1px 1px 0 rgba(0, 0, 0, 0.20),
+      0 -1px 1px 1px #fff inset;
+  }
+  .prose { max-width: 36rem; margin: 0 auto; }
+
+  .top-ribbon {
     display: flex; justify-content: space-between; align-items: center;
+    margin-bottom: 4rem;
+    font-family: var(--mono); font-size: 0.625rem;
+    text-transform: uppercase; letter-spacing: 0.12em;
+    color: var(--marg);
   }
-  nav.top a {
-    color: var(--ink-dim); text-decoration: none;
-    border-bottom: 1px solid transparent;
-    transition: border-color 120ms ease, color 120ms ease;
-  }
-  nav.top a:hover { color: var(--accent); border-bottom-color: var(--accent-dim); }
+  .top-ribbon a { color: var(--marg); text-decoration: none; }
+  .top-ribbon a:hover { color: var(--cobalt); }
 
-  header.essay { margin-bottom: 48px; }
-  .kicker {
-    font-family: var(--sans);
-    font-size: 12px; letter-spacing: 0.18em; text-transform: uppercase;
-    color: var(--accent); margin-bottom: 24px;
-  }
-  h1 {
+  header.chapter { text-align: center; margin-bottom: 2.5rem; }
+  h1.chapter-title {
     font-family: var(--serif); font-weight: 500;
-    font-size: clamp(34px, 6vw, 52px);
-    line-height: 1.08; letter-spacing: -0.015em;
-    margin: 0 0 28px;
+    font-size: 2.25rem; line-height: 1.15;
+    letter-spacing: -0.025em; text-wrap: pretty;
+    color: rgba(0, 0, 0, 0.82); margin: 0 0 1rem;
   }
-  .deck {
+  .dek {
     font-family: var(--serif); font-style: italic;
-    font-size: 21px; line-height: 1.5;
-    color: var(--ink-dim); margin: 0 0 28px;
+    font-size: 0.875rem; line-height: 1.7; color: #444;
+    max-width: 36rem; margin: 0 auto 1.5rem;
   }
   .byline {
-    font-family: var(--sans); font-size: 13px;
-    color: var(--ink-muted); letter-spacing: 0.02em;
+    font-family: var(--mono); font-size: 0.625rem;
+    text-transform: uppercase; letter-spacing: 0.12em; color: var(--marg);
   }
-  .byline strong { color: var(--ink-dim); font-weight: 500; }
+  .byline strong { color: var(--ink); font-weight: 500; }
 
-  /* Methodology callout */
+  .rule-pinch {
+    text-align: center; margin: 2rem 0;
+    font-family: var(--mono); font-size: 0.5rem;
+    letter-spacing: 0.4em; color: rgba(0, 0, 0, 0.25);
+  }
+  hr.hair {
+    border: none; border-top: 1px solid var(--hair);
+    margin: 2rem 0;
+  }
+
+  /* Body prose */
+  article p {
+    font-size: 0.8125rem; line-height: 2;
+    text-align: justify; hyphens: auto;
+    margin: 0 0 1.4rem; color: var(--ink);
+  }
+  article p.lede::first-letter {
+    initial-letter: 2; -webkit-initial-letter: 2;
+    font-weight: 500; color: var(--ink); padding-right: 0.4em;
+  }
+
+  /* Methodology block — prose, no card */
   .methodology {
-    margin: 40px 0 48px;
-    padding: 20px 22px;
-    background: rgba(212, 165, 116, 0.04);
-    border-left: 3px solid var(--accent-dim);
-    border-radius: 0 4px 4px 0;
-    font-family: var(--sans); font-size: 14px;
-    line-height: 1.65;
-    color: var(--ink-dim);
+    margin: 0 0 2.5rem;
+    border-left: 2px solid var(--cobalt);
+    padding-left: 1.25rem;
   }
-  .methodology strong {
-    color: var(--accent); font-weight: 600;
-    letter-spacing: 0.08em; text-transform: uppercase;
-    font-size: 11px; display: block; margin-bottom: 6px;
+  .methodology p {
+    font-size: 0.75rem; line-height: 1.85;
+    text-align: left; color: var(--marg); margin: 0 0 0.75rem;
   }
-  .methodology p { margin: 0 0 10px; }
   .methodology p:last-child { margin-bottom: 0; }
-  .methodology a {
-    color: var(--ink-dim); text-decoration: none;
-    border-bottom: 1px solid var(--accent-dim);
-  }
-  .methodology a:hover { color: var(--accent); }
+  .methodology p strong { color: var(--ink); font-weight: 500; }
+  .methodology a { color: var(--cobalt); }
 
-  /* Brief block */
-  .brief {
-    margin: 48px 0;
-    padding: 32px 36px;
-    background: var(--bg-elev);
-    border: 1px solid var(--rule);
-    border-radius: 6px;
-  }
-  .brief-label {
-    font-family: var(--sans); font-size: 11px;
-    letter-spacing: 0.2em; text-transform: uppercase;
-    color: var(--accent); margin-bottom: 14px;
-  }
-  .brief blockquote {
-    margin: 0; font-family: var(--serif);
-    font-size: 19px; line-height: 1.55;
-    color: var(--ink); font-style: italic;
+  /* Brief — inset blockquote */
+  blockquote.brief {
+    margin: 2rem 0 2.5rem;
+    padding: 0 0 0 1.25rem;
+    border-left: 2px solid var(--hair);
+    font-family: var(--serif); font-style: italic;
+    font-size: 0.9375rem; line-height: 1.7;
+    color: var(--ink);
   }
 
   /* Section heads */
-  h2.section {
-    font-family: var(--sans); font-weight: 600;
-    font-size: 14px; letter-spacing: 0.16em;
-    text-transform: uppercase; color: var(--accent);
-    margin: 64px 0 20px;
+  article h2 {
+    font-family: var(--serif); font-size: 0.875rem;
+    font-weight: 600; letter-spacing: -0.025em;
+    color: var(--ink); margin: 3rem 0 1rem;
+    scroll-margin-top: 48px;
+  }
+  article h3 {
+    font-family: var(--serif); font-size: 0.875rem;
+    font-weight: 600; letter-spacing: -0.025em;
+    color: var(--ink); margin: 2.5rem 0 0.5rem;
+    scroll-margin-top: 48px;
   }
 
-  /* Stage blocks */
-  .stage {
-    margin: 40px 0;
-    padding: 28px 28px 24px;
-    background: var(--bg-elev);
-    border: 1px solid var(--rule);
-    border-radius: 6px;
-    position: relative;
+  /* Stage eyebrow */
+  .stage-eyebrow {
+    font-family: var(--mono); font-size: 0.625rem;
+    text-transform: uppercase; letter-spacing: 0.16em;
+    color: var(--cobalt); margin: 2.5rem 0 0.4rem;
+    display: block;
   }
-  .stage-num {
-    position: absolute; top: -12px; left: 24px;
-    background: var(--bg);
-    padding: 0 12px;
-    font-family: var(--sans);
-    font-size: 11px; font-weight: 600;
-    letter-spacing: 0.16em; text-transform: uppercase;
-    color: var(--accent);
-  }
-  .stage-title {
-    font-family: var(--serif);
-    font-size: 22px; font-weight: 500;
-    margin: 4px 0 8px;
-    color: var(--ink);
-    letter-spacing: -0.01em;
-  }
-  .stage-sub {
-    font-family: var(--sans); font-size: 12px;
-    letter-spacing: 0.1em; text-transform: uppercase;
-    color: var(--ink-muted); margin-bottom: 16px;
-  }
-  .stage-sub .pill {
-    display: inline-block;
-    padding: 2px 8px; margin-right: 6px;
-    border: 1px solid var(--rule-warm);
-    border-radius: 99px;
-    color: var(--accent);
-  }
-  .stage-sub .elapsed { color: var(--good); }
-  .stage-why {
-    font-family: var(--serif); font-size: 16px;
-    line-height: 1.6; color: var(--ink-dim);
-    margin: 0 0 22px;
+  .stage-eyebrow .elapsed {
+    color: var(--marg); float: right;
+    letter-spacing: 0.10em;
   }
 
   /* Code blocks */
   .code-label {
-    font-family: var(--sans); font-size: 11px;
-    letter-spacing: 0.14em; text-transform: uppercase;
-    color: var(--ink-muted); margin: 20px 0 6px;
+    font-family: var(--mono); font-size: 0.625rem;
+    text-transform: uppercase; letter-spacing: 0.14em;
+    color: var(--marg); margin: 1.25rem 0 0.4rem;
   }
   pre {
-    margin: 0 0 12px;
-    padding: 16px 20px;
-    background: var(--bg-code);
-    border: 1px solid var(--rule);
-    border-radius: 4px;
+    margin: 0 0 1rem; padding: 1rem 1.25rem;
+    background: var(--code-bg);
+    outline: 1px solid var(--code-outline);
+    border-radius: 2px;
     font-family: var(--mono);
-    font-size: 13px; line-height: 1.55;
-    color: var(--ink-dim);
-    overflow-x: auto;
-    white-space: pre;
+    font-size: 0.75rem; line-height: 1.7;
+    color: var(--ink);
+    overflow-x: auto; white-space: pre;
   }
-  pre .k { color: var(--accent); }
-  pre .s { color: var(--good); }
-  pre .n { color: var(--note); }
-  pre .c { color: var(--ink-muted); font-style: italic; }
-  pre .endpoint { color: var(--accent); font-weight: 600; }
-  pre .method   { color: var(--good); font-weight: 600; }
+  pre .k { color: var(--cobalt); }
+  pre .s { color: var(--ink); }
+  pre .n { color: var(--cobalt); }
+  pre .c { color: var(--marg); font-style: italic; }
+  pre .endpoint { color: var(--cobalt); font-weight: 500; }
+  pre .method   { color: var(--cobalt); font-weight: 500; }
 
+  code {
+    font-family: var(--mono); font-size: 0.78rem;
+    background: rgba(0, 0, 0, 0.04); outline: 1px solid var(--code-outline);
+    padding: 0 0.25rem; border-radius: 2px;
+  }
+
+  /* Handoff — prose with mono prefix */
   .handoff {
-    margin-top: 16px;
-    padding: 12px 16px;
-    border-top: 1px dashed var(--rule);
-    font-family: var(--sans); font-size: 13px;
-    color: var(--ink-muted); line-height: 1.6;
+    font-size: 0.75rem; line-height: 1.85;
+    color: var(--marg); margin: 1rem 0 0;
+    font-family: var(--serif); font-style: italic;
   }
-  .handoff strong { color: var(--accent); font-weight: 600; letter-spacing: 0.04em; }
+  .handoff::before {
+    content: "HANDOFF →"; display: inline;
+    font-family: var(--mono); font-style: normal;
+    font-size: 0.625rem; letter-spacing: 0.14em;
+    text-transform: uppercase; color: var(--cobalt);
+    margin-right: 0.5rem;
+  }
 
-  /* Trigger inflection */
+  /* Trigger interlude — centered eyebrow + serif sentence */
   .trigger {
-    margin: 56px -8px;
-    padding: 32px 36px;
-    background: linear-gradient(180deg, rgba(212, 165, 116, 0.08) 0%, rgba(212, 165, 116, 0.02) 100%);
-    border: 1px solid var(--rule-warm);
-    border-radius: 6px;
-    text-align: center;
+    margin: 3rem 0;
+    padding: 1.5rem 0; text-align: center;
+    border-top: 1px solid var(--hair);
+    border-bottom: 1px solid var(--hair);
   }
-  .trigger-tag {
-    font-family: var(--sans); font-size: 11px;
-    letter-spacing: 0.22em; text-transform: uppercase;
-    color: var(--accent); margin-bottom: 14px;
+  .trigger .label {
+    font-family: var(--mono); font-size: 0.625rem;
+    text-transform: uppercase; letter-spacing: 0.22em;
+    color: var(--cobalt); margin-bottom: 0.75rem;
   }
   .trigger p {
     margin: 0; font-family: var(--serif);
-    font-size: 22px; line-height: 1.4;
+    font-size: 1rem; line-height: 1.5;
     color: var(--ink); font-style: italic;
+    text-align: center; max-width: 32rem;
+    margin: 0 auto;
   }
   .trigger small {
-    display: block; margin-top: 10px;
-    font-family: var(--mono); font-size: 12px;
-    color: var(--ink-muted); font-style: normal;
+    display: block; margin-top: 0.75rem;
+    font-family: var(--mono); font-size: 0.5625rem;
+    letter-spacing: 0.10em; color: var(--marg);
+    font-style: normal;
   }
 
-  /* Final artifact */
-  .artifact {
-    margin: 48px 0;
-    padding: 32px;
-    background: #0f0f12;
-    border: 1px solid var(--rule);
-    border-radius: 6px;
-    box-shadow: 0 8px 32px rgba(0,0,0,0.4);
+  /* Email facsimile */
+  .letter {
+    margin: 2rem 0 1.5rem;
+    border-top: 1px solid var(--hair);
+    border-bottom: 1px solid var(--hair);
+    padding: 1.5rem 0;
   }
-  .artifact-meta {
-    font-family: var(--mono); font-size: 12px;
-    color: var(--ink-muted); margin-bottom: 18px;
-    padding-bottom: 14px; border-bottom: 1px solid var(--rule);
-    line-height: 1.7;
+  .letter-meta {
+    font-family: var(--mono); font-size: 0.6875rem;
+    line-height: 1.9; color: var(--marg);
+    padding-bottom: 1rem;
+    border-bottom: 1px solid var(--hair);
+    margin-bottom: 1.25rem;
+    letter-spacing: 0.04em;
   }
-  .artifact-meta span { color: var(--ink-dim); }
-  .artifact-body {
-    font-family: var(--serif); font-size: 16px;
-    line-height: 1.7; color: var(--ink);
+  .letter-meta .label {
+    color: var(--cobalt); text-transform: uppercase;
+    letter-spacing: 0.12em; font-size: 0.625rem;
+    display: inline-block; min-width: 4.5rem;
   }
-  .artifact-body p { margin: 0 0 16px; }
+  .letter-meta .stamp {
+    color: var(--cobalt); margin-left: 0.4rem;
+    font-size: 0.625rem; letter-spacing: 0.10em;
+  }
+  .letter-body {
+    font-family: var(--serif); font-size: 0.8125rem;
+    line-height: 1.85; color: var(--ink);
+    text-align: left;
+  }
+  .letter-body p { margin: 0 0 1rem; }
   .cite {
-    color: var(--accent);
-    font-family: var(--mono); font-size: 11px;
-    vertical-align: super;
-    margin-left: 1px;
-    cursor: help;
-    text-decoration: none;
-    border-bottom: 1px dotted var(--accent-dim);
+    color: var(--cobalt); font-family: var(--mono);
+    font-size: 0.5625rem; vertical-align: super;
+    margin-left: 1px; text-decoration: none;
+    border-bottom: none;
   }
+  .cite:hover { color: var(--cobalt); }
   .citations {
-    margin-top: 24px; padding-top: 18px;
-    border-top: 1px dashed var(--rule);
-    font-family: var(--sans); font-size: 12px;
-    color: var(--ink-muted); line-height: 1.7;
+    margin-top: 1.25rem; padding-top: 0.75rem;
+    border-top: 1px dashed var(--hair);
+    font-family: var(--mono); font-size: 0.625rem;
+    color: var(--marg); line-height: 1.9;
+    letter-spacing: 0.04em;
   }
-  .citations ol { margin: 0; padding-left: 20px; }
-  .citations li { margin-bottom: 4px; }
-  .citations .src {
-    color: var(--ink-dim);
-    font-family: var(--mono);
+  .citations ol { margin: 0; padding-left: 1.25rem; }
+  .citations li { margin-bottom: 0.25rem; }
+  .citations a {
+    color: var(--marg); text-decoration: underline;
+    text-decoration-style: dotted; text-decoration-color: var(--hair);
   }
-  .citations .src a { color: inherit; text-decoration: none; border-bottom: 1px dotted var(--rule-warm); }
-  .citations .src a:hover { color: var(--accent); border-bottom-color: var(--accent-dim); }
-  .citations .conf {
-    color: var(--accent);
-    font-family: var(--mono);
-    margin-left: 6px;
+  .citations a:hover { color: var(--cobalt); text-decoration-color: var(--cobalt-underline); }
+  .citations .conf { color: var(--cobalt); margin-left: 0.5rem; }
+
+  /* Takeaways — ordered list, no card */
+  ol.takeaways {
+    margin: 1.5rem 0 0; padding-left: 1.25rem;
+    counter-reset: take;
+    list-style: none;
+  }
+  ol.takeaways li {
+    counter-increment: take;
+    position: relative; padding-left: 0;
+    font-size: 0.8125rem; line-height: 1.85;
+    margin-bottom: 1rem; color: var(--ink);
+    text-align: justify; hyphens: auto;
+  }
+  ol.takeaways li::before {
+    content: counter(take, decimal-leading-zero);
+    position: absolute; left: -2.5rem; top: 0.05rem;
+    font-family: var(--mono); font-size: 0.625rem;
+    letter-spacing: 0.10em; color: var(--cobalt);
+  }
+  ol.takeaways li strong { color: var(--ink); font-weight: 600; }
+
+  a {
+    color: var(--cobalt);
+    text-decoration: underline;
+    text-decoration-style: dotted;
+    text-decoration-color: var(--cobalt-underline);
+    text-decoration-thickness: 1px;
+    text-underline-offset: 3px;
+    text-decoration-skip-ink: all;
+  }
+  article em { font-style: italic; color: var(--ink); }
+  article strong { font-weight: 600; color: var(--ink); }
+
+  footer.colophon {
+    margin-top: 4rem; padding-top: 2rem;
+    border-top: 1px solid var(--hair);
+    font-family: var(--mono); font-size: 0.625rem;
+    text-transform: uppercase; letter-spacing: 0.12em;
+    color: var(--marg); line-height: 1.8; text-align: center;
+  }
+  footer.colophon a { color: var(--marg); text-decoration-color: var(--hair); }
+  footer.colophon a:hover { color: var(--cobalt); text-decoration-color: var(--cobalt-underline); }
+  footer.colophon .index { margin-top: 1rem; letter-spacing: 0.16em; }
+  footer.colophon .index a { margin: 0 0.5rem; }
+
+  .end-marker {
+    text-align: center; font-family: var(--mono);
+    font-size: 0.625rem; letter-spacing: 0.35em;
+    color: rgba(0, 0, 0, 0.25); margin: 4rem 0 0;
+    text-transform: uppercase;
   }
 
-  /* Closer bullets */
-  .takeaways {
-    margin: 56px 0 0;
-    padding: 32px 36px;
-    background: var(--bg-elev);
-    border: 1px solid var(--rule);
-    border-radius: 6px;
-  }
-  .takeaways-label {
-    font-family: var(--sans); font-size: 11px;
-    letter-spacing: 0.18em; text-transform: uppercase;
-    color: var(--accent); margin-bottom: 18px;
-  }
-  .takeaways ul { margin: 0; padding-left: 22px; }
-  .takeaways li {
-    font-family: var(--serif); font-size: 16px;
-    line-height: 1.65; color: var(--ink-dim);
-    margin-bottom: 12px;
-  }
-  .takeaways li strong { color: var(--ink); font-weight: 500; }
-  .takeaways li:last-child { margin-bottom: 0; }
-
-  .closer {
-    margin-top: 56px; padding-top: 32px;
-    border-top: 1px solid var(--rule);
-  }
-  .closer p { color: var(--ink-dim); font-size: 17px; }
-  .closer a {
-    color: var(--accent); text-decoration: none;
-    border-bottom: 1px solid var(--accent-dim);
-  }
-  .closer a:hover { border-bottom-color: var(--accent); }
-
-  footer.essay {
-    margin-top: 80px; padding-top: 28px;
-    border-top: 1px solid var(--rule);
-    font-family: var(--sans); font-size: 12px;
-    color: var(--ink-muted); line-height: 1.6;
-  }
-  footer.essay a { color: var(--ink-dim); text-decoration: none; border-bottom: 1px solid transparent; }
-  footer.essay a:hover { color: var(--accent); border-bottom-color: var(--accent-dim); }
-
-  @media (max-width: 640px) {
-    .container { padding: 32px 20px 64px; }
-    .brief, .stage, .artifact, .takeaways, .trigger { padding: 22px 20px; }
-    pre { font-size: 12px; padding: 14px 16px; }
+  @media (max-width: 720px) {
+    body { padding: 16px 12px; }
+    .sheet { padding: 48px 24px; }
+    h1.chapter-title { font-size: 1.75rem; }
+    .top-ribbon { margin-bottom: 2.5rem; }
+    pre { font-size: 0.6875rem; }
   }
 
   @media print {
-    html, body { background: white; color: black; }
-    .stage, .brief, .artifact, .takeaways, .methodology { background: white; border-color: #ccc; }
-    pre { background: #f6f6f6; border-color: #ddd; color: #222; }
-    nav.top, footer.essay { display: none; }
+    body { background: white; padding: 0; }
+    .sheet { box-shadow: none; padding: 0; max-width: none; }
+    .top-ribbon, footer.colophon { display: none; }
   }
 </style>
 </head>
 <body>
-<div class="container">
+<div class="sheet">
+  <div class="prose">
 
-  <nav class="top">
-    <a href="../">← parallel.kevin.energy</a>
-    <span>Demo 02 / 03</span>
-  </nav>
-
-  <header class="essay">
-    <div class="kicker">Workflow Trace · Reconstructed Against a Real Trigger Event</div>
-    <h1>From Brief to Outreach: A Workflow Wired in Public</h1>
-    <p class="deck">One agent, four APIs, one job. A reconstruction of what an agent built on Parallel's surface would have produced on May 4, 2026 — the day Sierra's $950M Series E was announced.</p>
-    <div class="byline"><strong>Kevin Nguyen</strong> · May 2026 · ~7 min read</div>
-  </header>
-
-  <div class="methodology">
-    <strong>Methodology</strong>
-    <p>Every company, person, fact, and citation in this trace is real and publicly documented. The trigger event is Sierra's $950M Series E announced <a href="https://techcrunch.com/2026/05/04/sierra-raises-950m-as-the-race-to-own-enterprise-ai-gets-serious/">May 4, 2026</a> at a $15.8B post-money valuation.</p>
-    <p>Sample API outputs are constructed from Parallel's documented surface — call shapes, response schemas, and field names match the production API. The workflow is real; the run is reconstructed using the actual public information available on the day of the trigger.</p>
-  </div>
-
-  <div class="brief">
-    <div class="brief-label">The Brief</div>
-    <blockquote>
-      "Wake me when a Series-B+ AI agent company announces a major funding round. Major rounds are 6-month buying windows for retrieval infrastructure. I want an enriched company record, three citable facts from the round coverage, and a same-day outreach the SDR can send — every claim traceable to a public source the prospect already trusts."
-    </blockquote>
-  </div>
-
-  <h2 class="section">The Pipeline · Four APIs, One Loop</h2>
-
-  <!-- ─── Stage 1: SOURCE / FindAll ─── -->
-  <div class="stage">
-    <div class="stage-num">Stage 01</div>
-    <h3 class="stage-title">Source the watchlist</h3>
-    <div class="stage-sub">
-      <span class="pill">Source</span><span>FindAll API</span>
-      <span class="elapsed" style="float:right;">⏱ 14.1s · 50 candidates</span>
+    <div class="top-ribbon">
+      <a href="../">parallel.kevin.energy</a>
+      <span>Chapter 02 / 03 · Demo</span>
     </div>
-    <p class="stage-why">The agent does not start with a CRM list. It starts with a brief. Stage 1 turns the brief into a verified list of entities — companies in the right stage, the right vertical, the right geography. No CSV upload, no scraped Crunchbase, no manual filter.</p>
 
-    <div class="code-label">Request</div>
+    <header class="chapter">
+      <h1 class="chapter-title">From Brief to Outreach: A Workflow Wired in Public</h1>
+      <p class="dek">One agent, four APIs, one job. A reconstruction of what an agent built on Parallel's surface would have produced on May 4, 2026 — the day Sierra's $950M Series E was announced.</p>
+      <div class="byline"><strong>Kevin Nguyen</strong> &nbsp;·&nbsp; May 2026 &nbsp;·&nbsp; ~7 min read</div>
+    </header>
+
+    <div class="rule-pinch">·   ·   ·</div>
+
+    <article>
+
+      <div class="methodology">
+        <p><strong>Methodology.</strong> Every company, person, fact, and citation in this trace is real and publicly documented. The trigger event is Sierra's $950M Series E announced <a href="https://techcrunch.com/2026/05/04/sierra-raises-950m-as-the-race-to-own-enterprise-ai-gets-serious/">May 4, 2026</a> at a $15.8B post-money valuation.</p>
+        <p>Sample API outputs are constructed from Parallel's documented surface — call shapes, response schemas, and field names match the production API. The workflow is real; the run is reconstructed using the actual public information available on the day of the trigger.</p>
+      </div>
+
+      <p class="lede">The brief comes in over Slack on a Friday afternoon. The sales engineer wants a pipeline that watches for funding signals at AI agent companies, enriches the entity record, surfaces grounded outreach context, and drops a draft email in the SDR's inbox before anyone else in the funnel has finished reading the headline.</p>
+
+      <blockquote class="brief">"Wake me when a Series-B+ AI agent company announces a major funding round. Major rounds are six-month buying windows for retrieval infrastructure. I want an enriched company record, three citable facts from the round coverage, and a same-day outreach the SDR can send — every claim traceable to a public source the prospect already trusts."</blockquote>
+
+      <p>What follows is the trace of one run of that pipeline, against one real public event, across four Parallel APIs. The shape of each API call is reproduced verbatim; the outputs reconstruct what an agent built on this stack would have produced on the morning of May 4, 2026.</p>
+
+      <h2>The Pipeline · Four APIs, One Loop</h2>
+
+      <span class="stage-eyebrow">Stage 01 · Source · FindAll API <span class="elapsed">⏱ 14.1s · 50 candidates</span></span>
+      <h3>Source the watchlist</h3>
+      <p>The agent does not start with a CRM list. It starts with the brief. Stage one turns the brief into a verified list of entities — companies in the right stage, the right vertical, the right geography. No CSV upload, no scraped Crunchbase, no manual filter.</p>
+
+      <div class="code-label">Request</div>
 <pre><span class="method">POST</span> <span class="endpoint">https://api.parallel.ai/v1/findall/runs</span>
 {
   <span class="k">"objective"</span>: <span class="s">"US-based AI agent companies, Series B or later,</span>
@@ -395,33 +398,27 @@
   <span class="k">"generator"</span>: <span class="s">"core"</span>
 }</pre>
 
-    <div class="code-label">Response — 50 candidates returned, first six shown</div>
+      <div class="code-label">Response — 50 candidates returned, first six shown</div>
 <pre>{
   <span class="k">"run_id"</span>: <span class="s">"fa_run_8YQk...3nP"</span>,
   <span class="k">"matches"</span>: [
-    { <span class="k">"name"</span>: <span class="s">"Sierra"</span>,        <span class="k">"url"</span>: <span class="s">"https://sierra.ai"</span>,       <span class="k">"category"</span>: <span class="s">"customer-service agents"</span>,   <span class="k">"confidence"</span>: <span class="n">0.96</span> },
-    { <span class="k">"name"</span>: <span class="s">"Decagon"</span>,       <span class="k">"url"</span>: <span class="s">"https://decagon.ai"</span>,      <span class="k">"category"</span>: <span class="s">"customer-service agents"</span>,   <span class="k">"confidence"</span>: <span class="n">0.95</span> },
-    { <span class="k">"name"</span>: <span class="s">"Cresta"</span>,        <span class="k">"url"</span>: <span class="s">"https://cresta.com"</span>,      <span class="k">"category"</span>: <span class="s">"contact-center agents"</span>,      <span class="k">"confidence"</span>: <span class="n">0.94</span> },
-    { <span class="k">"name"</span>: <span class="s">"Lindy"</span>,         <span class="k">"url"</span>: <span class="s">"https://lindy.ai"</span>,        <span class="k">"category"</span>: <span class="s">"no-code automation agents"</span>,  <span class="k">"confidence"</span>: <span class="n">0.91</span> },
-    { <span class="k">"name"</span>: <span class="s">"Cognition"</span>,     <span class="k">"url"</span>: <span class="s">"https://cognition.ai"</span>,    <span class="k">"category"</span>: <span class="s">"software-engineering agents"</span>,<span class="k">"confidence"</span>: <span class="n">0.93</span> },
-    { <span class="k">"name"</span>: <span class="s">"Crew AI"</span>,       <span class="k">"url"</span>: <span class="s">"https://crewai.com"</span>,      <span class="k">"category"</span>: <span class="s">"multi-agent orchestration"</span>,  <span class="k">"confidence"</span>: <span class="n">0.89</span> }
+    { <span class="k">"name"</span>: <span class="s">"Sierra"</span>,        <span class="k">"url"</span>: <span class="s">"https://sierra.ai"</span>,    <span class="k">"category"</span>: <span class="s">"customer-service agents"</span>,    <span class="k">"confidence"</span>: <span class="n">0.96</span> },
+    { <span class="k">"name"</span>: <span class="s">"Decagon"</span>,       <span class="k">"url"</span>: <span class="s">"https://decagon.ai"</span>,   <span class="k">"category"</span>: <span class="s">"customer-service agents"</span>,    <span class="k">"confidence"</span>: <span class="n">0.95</span> },
+    { <span class="k">"name"</span>: <span class="s">"Cresta"</span>,        <span class="k">"url"</span>: <span class="s">"https://cresta.com"</span>,   <span class="k">"category"</span>: <span class="s">"contact-center agents"</span>,       <span class="k">"confidence"</span>: <span class="n">0.94</span> },
+    { <span class="k">"name"</span>: <span class="s">"Lindy"</span>,         <span class="k">"url"</span>: <span class="s">"https://lindy.ai"</span>,     <span class="k">"category"</span>: <span class="s">"no-code automation agents"</span>,   <span class="k">"confidence"</span>: <span class="n">0.91</span> },
+    { <span class="k">"name"</span>: <span class="s">"Cognition"</span>,     <span class="k">"url"</span>: <span class="s">"https://cognition.ai"</span>, <span class="k">"category"</span>: <span class="s">"software-engineering agents"</span>, <span class="k">"confidence"</span>: <span class="n">0.93</span> },
+    { <span class="k">"name"</span>: <span class="s">"Crew AI"</span>,       <span class="k">"url"</span>: <span class="s">"https://crewai.com"</span>,   <span class="k">"category"</span>: <span class="s">"multi-agent orchestration"</span>,   <span class="k">"confidence"</span>: <span class="n">0.89</span> }
     <span class="c">// ... 44 more</span>
   ]
 }</pre>
-    <div class="handoff"><strong>Handoff →</strong> The 50 verified candidates become the input batch for Stage 2. Each carries a confidence floor; anything below 0.80 is held for human review before enrichment cost is spent.</div>
-  </div>
 
-  <!-- ─── Stage 2: REASON / Task Enrichment ─── -->
-  <div class="stage">
-    <div class="stage-num">Stage 02</div>
-    <h3 class="stage-title">Enrich each entity, with basis</h3>
-    <div class="stage-sub">
-      <span class="pill">Reason</span><span>Task API · Enrichment, processor=core</span>
-      <span class="elapsed" style="float:right;">⏱ 2m 04s · 50 records</span>
-    </div>
-    <p class="stage-why">Stage 2 takes the brief from a list of names to a structured dataset. The schema is the contract. Every field carries its own citation and confidence — the agent can route low-confidence fields to a second pass without recomputing the rest.</p>
+      <p class="handoff">The fifty verified candidates become the input batch for stage two. Each carries a confidence floor; anything below <code>0.80</code> is held for human review before enrichment cost is spent.</p>
 
-    <div class="code-label">Request — Group enrichment with explicit schema</div>
+      <span class="stage-eyebrow">Stage 02 · Reason · Task API (Enrichment, processor=core) <span class="elapsed">⏱ 2m 04s · 50 records</span></span>
+      <h3>Enrich each entity, with basis</h3>
+      <p>Stage two takes the brief from a list of names to a structured dataset. The schema is the contract. Every field carries its own citation and confidence — the agent can route low-confidence fields to a second pass without recomputing the rest.</p>
+
+      <div class="code-label">Request — Group enrichment with explicit schema</div>
 <pre><span class="method">POST</span> <span class="endpoint">https://api.parallel.ai/v1/task/groups</span>
 {
   <span class="k">"processor"</span>: <span class="s">"core"</span>,
@@ -438,7 +435,7 @@
   }
 }</pre>
 
-    <div class="code-label">Response — Sierra's enriched record</div>
+      <div class="code-label">Response — Sierra's enriched record</div>
 <pre>{
   <span class="k">"entity"</span>: <span class="s">"Sierra"</span>,
   <span class="k">"output"</span>: {
@@ -462,20 +459,14 @@
     <span class="k">"latest_funding_event_date"</span>: { <span class="k">"citation"</span>: <span class="s">"cnbc.com/2026/05/04/bret-taylor-sierra..."</span>,  <span class="k">"confidence"</span>: <span class="n">0.99</span> }
   }
 }</pre>
-    <div class="handoff"><strong>Handoff →</strong> The <code>latest_funding_event_date: 2026-05-04</code> is fresh — within the 30-day "buying-window" tolerance. Stage 3's monitor is what surfaced it; Stage 4 will ground the outreach in the round coverage itself.</div>
-  </div>
 
-  <!-- ─── Stage 3: WATCH / Monitor ─── -->
-  <div class="stage">
-    <div class="stage-num">Stage 03</div>
-    <h3 class="stage-title">Watch for the trigger</h3>
-    <div class="stage-sub">
-      <span class="pill">Watch</span><span>Monitor API · frequency=1h</span>
-      <span class="elapsed" style="float:right;">⏱ Standing watch, 50 entities</span>
-    </div>
-    <p class="stage-why">Stage 3 is the most underrated primitive on the stack — and the one that turns the workflow from a one-shot job into a system. The agent does not poll Crunchbase. It registers an objective and gets a webhook when reality changes against it.</p>
+      <p class="handoff">The <code>latest_funding_event_date: 2026-05-04</code> is fresh — within the thirty-day buying-window tolerance. Stage three's monitor is what surfaced it; stage four will ground the outreach in the round coverage itself.</p>
 
-    <div class="code-label">Request — one Monitor per company, batched</div>
+      <span class="stage-eyebrow">Stage 03 · Watch · Monitor API (frequency=1h) <span class="elapsed">⏱ standing watch · 50 entities</span></span>
+      <h3>Watch for the trigger</h3>
+      <p>Stage three is the most underrated primitive on the stack — and the one that turns the workflow from a one-shot job into a system. The agent does not poll Crunchbase. It registers an objective and gets a webhook when reality changes against it.</p>
+
+      <div class="code-label">Request — one Monitor per company, batched</div>
 <pre><span class="method">POST</span> <span class="endpoint">https://api.parallel.ai/v1/monitor/runs</span>
 {
   <span class="k">"objective"</span>: <span class="s">"new funding-round announcement, equity round of $50M+,</span>
@@ -490,7 +481,7 @@
   }
 }</pre>
 
-    <div class="code-label">Response — event payload delivered to webhook (Mon May 4, 09:14 PT)</div>
+      <div class="code-label">Response — webhook payload delivered Mon May 4, 09:14 PT</div>
 <pre>{
   <span class="k">"event_id"</span>: <span class="s">"ev_7Wgr...3qC"</span>,
   <span class="k">"monitor_id"</span>: <span class="s">"mon_4Pfn...2vK"</span>,
@@ -507,27 +498,20 @@
     ]
   }
 }</pre>
-    <div class="handoff"><strong>Handoff →</strong> Webhook fires. Pipeline resumes. Stage 4 grounds the outreach in citations from the public coverage before the SDR opens their morning Slack.</div>
-  </div>
 
-  <!-- ─── The trigger inflection ─── -->
-  <div class="trigger">
-    <div class="trigger-tag">⚡ Trigger fires</div>
-    <p>Monday, May 4, 2026, 09:14 PT. Sierra's watcher flips. $950M Series E, $15.8B valuation, Tiger Global + GV co-leading. The pipeline resumes; the SDR has same-day outreach in seven minutes.</p>
-    <small>monitor.event=ev_7Wgr…3qC · pipeline resume · t+0.0s</small>
-  </div>
+      <p class="handoff">Webhook fires. Pipeline resumes. Stage four grounds the outreach in citations from the public coverage before the SDR opens their morning Slack.</p>
 
-  <!-- ─── Stage 4: PERCEIVE / Search ─── -->
-  <div class="stage">
-    <div class="stage-num">Stage 04</div>
-    <h3 class="stage-title">Ground the outreach</h3>
-    <div class="stage-sub">
-      <span class="pill">Perceive</span><span>Search API · mode=advanced</span>
-      <span class="elapsed" style="float:right;">⏱ 5.3s · 3 grounded hooks</span>
-    </div>
-    <p class="stage-why">The agent does not need ten blue links about Sierra. It needs three specific facts an SDR can paste into the email without copying anything that isn't cited. Stage 4 is a precision query, not a research session.</p>
+      <div class="trigger">
+        <div class="label">⚡ Trigger Fires</div>
+        <p>Monday, May 4, 2026, 09:14 PT. Sierra's watcher flips. $950M Series E, $15.8B valuation, Tiger Global and GV co-leading. The pipeline resumes; the SDR has same-day outreach in seven minutes.</p>
+        <small>monitor.event=ev_7Wgr…3qC &nbsp;·&nbsp; pipeline resume &nbsp;·&nbsp; t+0.0s</small>
+      </div>
 
-    <div class="code-label">Request — one objective, three keyword queries</div>
+      <span class="stage-eyebrow">Stage 04 · Perceive · Search API (mode=advanced) <span class="elapsed">⏱ 5.3s · 3 grounded hooks</span></span>
+      <h3>Ground the outreach</h3>
+      <p>The agent does not need ten blue links about Sierra. It needs three specific facts an SDR can paste into the email without copying anything that isn't cited. Stage four is a precision query, not a research session.</p>
+
+      <div class="code-label">Request — one objective, three keyword queries</div>
 <pre><span class="method">POST</span> <span class="endpoint">https://api.parallel.ai/v1/search</span>
 {
   <span class="k">"objective"</span>: <span class="s">"Three specific, citable facts about Sierra's</span>
@@ -543,7 +527,7 @@
   <span class="k">"mode"</span>: <span class="s">"advanced"</span>
 }</pre>
 
-    <div class="code-label">Response — three excerpts, each cited</div>
+      <div class="code-label">Response — three excerpts, each cited</div>
 <pre>{
   <span class="k">"results"</span>: [
     {
@@ -568,53 +552,57 @@
     }
   ]
 }</pre>
-    <div class="handoff"><strong>Handoff →</strong> Three excerpts, each with a citation and a confidence score, ready to compose into outreach. No claim in the email lacks a footnote, and every footnote points to a source the prospect already trusts.</div>
-  </div>
 
-  <!-- ─── The final artifact ─── -->
-  <h2 class="section">The Output · A Same-Day Outreach</h2>
+      <p class="handoff">Three excerpts, each with a citation and a confidence score, ready to compose into outreach. No claim in the email lacks a footnote, and every footnote points to a source the prospect already trusts.</p>
 
-  <div class="artifact">
-    <div class="artifact-meta">
-      <span>From:</span> sdr@example.com<br />
-      <span>To:</span> bret@sierra.ai<br />
-      <span>Subject:</span> retrieval infra for the Agent Data Platform<br />
-      <span>Sent:</span> Mon May 4, 09:21 PT &nbsp; <span style="color: var(--good);">· 7m after trigger</span>
-    </div>
-    <div class="artifact-body">
-      <p>Hi Bret — congratulations on the $950M Series E and the $15.8B mark.<a href="#cite-1" class="cite">¹</a></p>
-      <p>Crossing $100M ARR in two years and reaching $150M ARR by February is the kind of compounding that only happens when the underlying product is solving a real procurement problem at the Fortune 50 — and Sierra's expansion from customer service into a broader Agent OS, with Ghostwriter and the Agent Data Platform, is the right next surface to scale into.<a href="#cite-2" class="cite">²</a><a href="#cite-3" class="cite">³</a></p>
-      <p>We're building the web-retrieval primitive that sits underneath that platform — typed, cited, confidence-scored answers for agents that need to ground customer-facing claims in live public data without hallucinating into a regulated industry. Would love 20 minutes to compare notes on what the right shape of that primitive is for Sierra's roadmap.</p>
-      <p>— [SDR name]</p>
-    </div>
-    <div class="citations">
-      <ol>
-        <li id="cite-1"><span class="src"><a href="https://techcrunch.com/2026/05/04/sierra-raises-950m-as-the-race-to-own-enterprise-ai-gets-serious/">techcrunch.com — Sierra raises $950M</a></span><span class="conf">conf 0.99</span></li>
-        <li id="cite-2"><span class="src"><a href="https://techcrunch.com/2025/11/21/bret-taylors-sierra-reaches-100m-arr/">techcrunch.com — Sierra reaches $100M ARR</a></span><span class="conf">conf 0.95</span></li>
-        <li id="cite-3"><span class="src"><a href="https://www.cmswire.com/customer-experience/sierra-raises-950m-at-15b-valuation-eyes-transformation-beyond-customer-support/">cmswire.com — Agent OS expansion</a></span><span class="conf">conf 0.93</span></li>
+      <h2>The Output · A Same-Day Outreach</h2>
+
+      <div class="letter">
+        <div class="letter-meta">
+          <div><span class="label">From</span> sdr@example.com</div>
+          <div><span class="label">To</span> bret@sierra.ai</div>
+          <div><span class="label">Subject</span> retrieval infra for the Agent Data Platform</div>
+          <div><span class="label">Sent</span> Mon May 4, 09:21 PT <span class="stamp">· 7m after trigger</span></div>
+        </div>
+        <div class="letter-body">
+          <p>Hi Bret — congratulations on the $950M Series E and the $15.8B mark.<a href="#cite-1" class="cite">¹</a></p>
+          <p>Crossing $100M ARR in two years and reaching $150M ARR by February is the kind of compounding that only happens when the underlying product is solving a real procurement problem at the Fortune 50 — and Sierra's expansion from customer service into a broader Agent OS, with Ghostwriter and the Agent Data Platform, is the right next surface to scale into.<a href="#cite-2" class="cite">²</a><a href="#cite-3" class="cite">³</a></p>
+          <p>We're building the web-retrieval primitive that sits underneath that platform — typed, cited, confidence-scored answers for agents that need to ground customer-facing claims in live public data without hallucinating into a regulated industry. Would love 20 minutes to compare notes on what the right shape of that primitive is for Sierra's roadmap.</p>
+          <p>— [SDR name]</p>
+        </div>
+        <div class="citations">
+          <ol>
+            <li id="cite-1"><a href="https://techcrunch.com/2026/05/04/sierra-raises-950m-as-the-race-to-own-enterprise-ai-gets-serious/">techcrunch.com — Sierra raises $950M</a><span class="conf">conf 0.99</span></li>
+            <li id="cite-2"><a href="https://techcrunch.com/2025/11/21/bret-taylors-sierra-reaches-100m-arr/">techcrunch.com — Sierra reaches $100M ARR</a><span class="conf">conf 0.95</span></li>
+            <li id="cite-3"><a href="https://www.cmswire.com/customer-experience/sierra-raises-950m-at-15b-valuation-eyes-transformation-beyond-customer-support/">cmswire.com — Agent OS expansion</a><span class="conf">conf 0.93</span></li>
+          </ol>
+        </div>
+      </div>
+
+      <h2>What This Workflow Demonstrates</h2>
+
+      <ol class="takeaways">
+        <li><strong>Five primitives, four APIs, one job.</strong> The essay argued web infrastructure for agents has five primitives. The workflow is what those primitives look like wired together — not as a demo, as a system.</li>
+        <li><strong>Confidence routes the work.</strong> Stage two holds low-confidence enrichments for review without re-running the rest. Stage three only watches the entity-fields the agent is most sure about. Calibrated confidence is not a feature; it is the schedule.</li>
+        <li><strong>The schema is the contract.</strong> Every stage either consumes a typed input or produces a typed output. Nothing in this pipeline is "look at the search results and figure it out." The handoff between stages is what makes the workflow composable rather than fragile.</li>
+        <li><strong>Citations are the audit trail.</strong> Three facts in the final email, three citations in the artifact, three confidence scores attached. Every link in this trace resolves to a real public page that supports the claim. That is what production-grade web data feels like in the hand.</li>
       </ol>
-    </div>
+
+    </article>
+
+    <footer class="colophon">
+      <div>By <a href="https://kevin.energy">Kevin Nguyen</a> · Written May 2026 while preparing for a TPMM interview at <a href="https://parallel.ai">Parallel Web Systems</a> · Source on <a href="https://github.com/kevinnguyen805/parallel-tpmm-demos">GitHub</a> · Not affiliated with or endorsed by Sierra or Parallel</div>
+      <div class="index">
+        <a href="../">Index</a> &nbsp;·&nbsp;
+        <a href="../essay/">Essay</a> &nbsp;·&nbsp;
+        <a href="../demo/">Demo</a> &nbsp;·&nbsp;
+        <a href="../battlecard/">Battlecard</a>
+      </div>
+    </footer>
+
+    <div class="end-marker">╌╌&nbsp;&nbsp;END&nbsp;&nbsp;╌╌</div>
+
   </div>
-
-  <!-- ─── Takeaways ─── -->
-  <div class="takeaways">
-    <div class="takeaways-label">What this workflow demonstrates</div>
-    <ul>
-      <li><strong>Five primitives, four APIs, one job.</strong> The essay argued web infrastructure for agents has five primitives. The workflow is what those primitives look like wired together &mdash; not as a demo, as a system.</li>
-      <li><strong>Confidence routes the work.</strong> Stage 2 holds low-confidence enrichments for review without re-running the rest. Stage 3 only watches the entity-fields the agent is most sure about. Calibrated confidence is not a feature; it is the schedule.</li>
-      <li><strong>The schema is the contract.</strong> Every stage either consumes a typed input or produces a typed output. Nothing in this pipeline is "look at the search results and figure it out." The handoff between stages is what makes the workflow composable rather than fragile.</li>
-      <li><strong>Citations are the audit trail.</strong> Three facts in the final email, three citations in the artifact, three confidence scores attached. The SDR can paste the citations back in if a prospect asks where a claim came from. Every link in this trace resolves to a real public page that supports the claim. That is what production-grade web data feels like in the hand.</li>
-    </ul>
-  </div>
-
-  <div class="closer">
-    <p>Read next: <a href="../battlecard/">The Battlecard</a> &mdash; the four loudest APIs in the category, audited on the claim. And back to <a href="../essay/">The Essay</a> for the category frame this workflow is built on.</p>
-  </div>
-
-  <footer class="essay">
-    <p>By <a href="https://kevin.energy">Kevin Nguyen</a>. Written in May 2026 while preparing for a Technical Product Marketing Manager interview at <a href="https://parallel.ai">Parallel Web Systems</a>. Source on <a href="https://github.com/kevinnguyen805/parallel-tpmm-demos">GitHub</a>. Not affiliated with or endorsed by Sierra or Parallel.</p>
-  </footer>
-
 </div>
 </body>
 </html>
