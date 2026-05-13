@@ -118,10 +118,128 @@ test('feature: essay describes all 5 primitives in copy (Perceive/Read/Reason/Wa
   assert(missing.length === 0, `Essay copy missing primitive definitions: ${missing.join(', ')}`);
 });
 
+// ─── Unit: demo page ─────────────────────────────────────────────────
+test('unit: demo/index.html exists', () => read('demo/index.html'));
+
+test('unit: demo includes title "From Brief to Outreach"', () => {
+  const html = read('demo/index.html');
+  assert(/From Brief to Outreach/.test(html), 'Demo title not present');
+});
+
+test('unit: demo has 4 numbered stage blocks (Stage 01-04)', () => {
+  const html = read('demo/index.html');
+  for (let i = 1; i <= 4; i++) {
+    const tag = `Stage 0${i}`;
+    assert(html.includes(tag), `Missing stage marker "${tag}"`);
+  }
+});
+
+test('unit: demo names all 4 Parallel APIs (FindAll, Task, Monitor, Search)', () => {
+  const html = read('demo/index.html');
+  const apis = ['FindAll API', 'Task API', 'Monitor API', 'Search API'];
+  const missing = apis.filter(a => !html.includes(a));
+  assert(missing.length === 0, `Demo missing API labels: ${missing.join(', ')}`);
+});
+
+test('unit: demo has explicit methodology / sample-output disclosure', () => {
+  const html = read('demo/index.html');
+  assert(/Methodology/i.test(html), 'Missing Methodology block');
+  assert(/illustrative|reconstruction|fictional/i.test(html),
+    'Methodology must clearly disclose the illustrative / fictional nature of the trace');
+});
+
+test('feature: demo has API request examples (POST + endpoint)', () => {
+  const html = read('demo/index.html');
+  const posts = (html.match(/POST/g) || []).length;
+  const endpoints = (html.match(/api\.parallel\.ai/g) || []).length;
+  assert(posts >= 4, `Expected ≥4 POST examples in demo, found ${posts}`);
+  assert(endpoints >= 4, `Expected ≥4 api.parallel.ai endpoints, found ${endpoints}`);
+});
+
+test('feature: demo final artifact has at least 3 cited claims', () => {
+  const html = read('demo/index.html');
+  const artifactBlock = html.match(/class="artifact"[\s\S]*?<\/div>\s*<\/div>/);
+  assert(artifactBlock, 'No .artifact block found');
+  const cites = (artifactBlock[0].match(/class="cite"/g) || []).length;
+  assert(cites >= 3, `Expected ≥3 citations in final artifact, found ${cites}`);
+});
+
+// ─── Unit: battlecard ────────────────────────────────────────────────
+test('unit: battlecard/index.html exists', () => read('battlecard/index.html'));
+
+test('unit: battlecard includes title "Same Task, Four APIs, Audited"', () => {
+  const html = read('battlecard/index.html');
+  assert(/Same Task, Four APIs, Audited/.test(html), 'Battlecard title not present');
+});
+
+test('unit: battlecard names all 4 competitors (Parallel, Exa, Perplexity, Tavily)', () => {
+  const html = read('battlecard/index.html');
+  const vendors = ['Parallel', 'Exa', 'Perplexity', 'Tavily'];
+  const missing = vendors.filter(v => !new RegExp(`\\b${v}\\b`).test(html));
+  assert(missing.length === 0, `Battlecard missing vendor names: ${missing.join(', ')}`);
+});
+
+test('unit: battlecard has methodology disclosure (no personal re-run claim)', () => {
+  const html = read('battlecard/index.html');
+  assert(/Methodology/i.test(html), 'Missing Methodology block');
+  assert(/did not personally re-run|public sources|vendor-published/i.test(html),
+    'Methodology must explicitly note the numbers are not personally re-run');
+});
+
+test('feature: battlecard summary table has expected dimension columns', () => {
+  const html = read('battlecard/index.html');
+  const tableBlock = html.match(/<table class="grid">[\s\S]*?<\/table>/);
+  assert(tableBlock, 'No summary grid table found');
+  const required = ['BrowseComp', 'confidence', 'Citation', 'Index', 'M&amp;A'];
+  const missing = required.filter(c => !tableBlock[0].includes(c));
+  assert(missing.length === 0, `Battlecard summary table missing columns: ${missing.join(', ')}`);
+});
+
+test('feature: battlecard "what I would audit beyond" section has 5 items', () => {
+  const html = read('battlecard/index.html');
+  // Capture from .gap div start to next major section (.verdict).
+  const gapBlock = html.match(/class="gap">([\s\S]*?)class="verdict"/);
+  assert(gapBlock, 'Missing .gap block (TPMM audit-beyond-this section)');
+  const lis = (gapBlock[1].match(/<li>/g) || []).length;
+  assert(lis === 5, `Expected exactly 5 audit-gap items, found ${lis}`);
+});
+
+test('quality: battlecard cites public sources per row', () => {
+  const html = read('battlecard/index.html');
+  const sources = (html.match(/class="source-note"/g) || []).length;
+  assert(sources >= 4, `Expected ≥4 source-note citations across dimensions, found ${sources}`);
+});
+
+// ─── Cross-page consistency ──────────────────────────────────────────
+test('cross: all 3 pieces share the same kevin.energy footer link', () => {
+  const pages = ['essay/index.html', 'demo/index.html', 'battlecard/index.html'];
+  for (const p of pages) {
+    const html = read(p);
+    assert(/href="https:\/\/kevin\.energy"/.test(html), `${p} missing kevin.energy footer link`);
+    assert(/github\.com\/kevinnguyen805\/parallel-tpmm-demos/.test(html),
+      `${p} missing GitHub source link`);
+  }
+});
+
+test('cross: root index marks demo + battlecard Live (not Coming Soon)', () => {
+  const html = read('index.html');
+  assert(!/>\s*Coming soon\s*</i.test(html),
+    'Root index still has "Coming soon" status — should be Live');
+  // Count card elements, not CSS selectors.
+  const liveCards = (html.match(/<a class="card" data-status="live"/g) || []).length;
+  assert(liveCards === 3, `Expected 3 Live card elements on landing, found ${liveCards}`);
+});
+
 // ─── E2E: internal link integrity ────────────────────────────────────
 test('e2e: root index links to essay/', () => {
   const html = read('index.html');
   assert(/href="essay\/"/.test(html), 'Root index missing href="essay/"');
+});
+
+test('e2e: root index links to demo/ and battlecard/', () => {
+  const html = read('index.html');
+  assert(/href="demo\/"/.test(html), 'Root index missing href="demo/"');
+  assert(/href="battlecard\/"/.test(html), 'Root index missing href="battlecard/"');
 });
 
 test('e2e: essay back-link to root resolves', () => {

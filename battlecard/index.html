@@ -1,0 +1,487 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Same Task, Four APIs, Audited — A Battlecard</title>
+<meta name="description" content="A comparative read on Parallel Task, Exa Research, Perplexity Deep Research, and Tavily Search — built from published benchmarks, with the methodology gaps a TPMM would close on day one." />
+<meta name="author" content="Kevin Nguyen" />
+<meta property="og:title" content="Same Task, Four APIs, Audited" />
+<meta property="og:description" content="Comparative analysis of four agentic-research APIs, with the methodology gaps a TPMM would close." />
+<meta property="og:type" content="article" />
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='40' fill='%23d4a574'/%3E%3C/svg%3E" />
+<style>
+  :root {
+    --bg: #0a0a0b;
+    --bg-elev: #131316;
+    --bg-cell: #0e0e11;
+    --rule: #1f1f24;
+    --rule-warm: #2d251a;
+    --ink: #e8e8ea;
+    --ink-dim: #9c9ca3;
+    --ink-muted: #6c6c74;
+    --accent: #d4a574;
+    --accent-dim: #8a6d4d;
+    --good: #79c590;
+    --warn: #d4a574;
+    --bad: #c47878;
+    --note: #8aa5d4;
+    --serif: ui-serif, 'Iowan Old Style', 'Apple Garamond', Georgia, Cambria, 'Times New Roman', serif;
+    --sans: ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Inter, sans-serif;
+    --mono: ui-monospace, 'SF Mono', Menlo, Monaco, Consolas, monospace;
+  }
+  * { box-sizing: border-box; }
+  html, body {
+    margin: 0; padding: 0;
+    background: var(--bg);
+    color: var(--ink);
+    font-family: var(--serif);
+    font-size: 18px;
+    line-height: 1.7;
+    -webkit-font-smoothing: antialiased;
+  }
+  .container { max-width: 900px; margin: 0 auto; padding: 64px 24px 96px; }
+
+  nav.top {
+    font-family: var(--sans); font-size: 13px;
+    color: var(--ink-muted); letter-spacing: 0.02em;
+    margin-bottom: 64px;
+    display: flex; justify-content: space-between; align-items: center;
+  }
+  nav.top a {
+    color: var(--ink-dim); text-decoration: none;
+    border-bottom: 1px solid transparent;
+    transition: border-color 120ms ease, color 120ms ease;
+  }
+  nav.top a:hover { color: var(--accent); border-bottom-color: var(--accent-dim); }
+
+  header.essay { margin-bottom: 48px; }
+  .kicker {
+    font-family: var(--sans);
+    font-size: 12px; letter-spacing: 0.18em; text-transform: uppercase;
+    color: var(--accent); margin-bottom: 24px;
+  }
+  h1 {
+    font-family: var(--serif); font-weight: 500;
+    font-size: clamp(34px, 6vw, 52px);
+    line-height: 1.08; letter-spacing: -0.015em;
+    margin: 0 0 28px;
+  }
+  .deck {
+    font-family: var(--serif); font-style: italic;
+    font-size: 21px; line-height: 1.5;
+    color: var(--ink-dim); margin: 0 0 28px;
+  }
+  .byline {
+    font-family: var(--sans); font-size: 13px;
+    color: var(--ink-muted); letter-spacing: 0.02em;
+  }
+  .byline strong { color: var(--ink-dim); font-weight: 500; }
+
+  /* Methodology callout */
+  .methodology {
+    margin: 40px 0 48px;
+    padding: 22px 24px;
+    background: rgba(212, 165, 116, 0.04);
+    border-left: 3px solid var(--accent-dim);
+    border-radius: 0 4px 4px 0;
+    font-family: var(--sans); font-size: 14px;
+    line-height: 1.65;
+    color: var(--ink-dim);
+  }
+  .methodology strong {
+    color: var(--accent); font-weight: 600;
+    letter-spacing: 0.08em; text-transform: uppercase;
+    font-size: 11px; display: block; margin-bottom: 6px;
+  }
+  .methodology p { margin: 0 0 10px; }
+  .methodology p:last-child { margin-bottom: 0; }
+
+  h2.section {
+    font-family: var(--sans); font-weight: 600;
+    font-size: 14px; letter-spacing: 0.16em;
+    text-transform: uppercase; color: var(--accent);
+    margin: 64px 0 20px;
+  }
+
+  /* Summary grid */
+  .summary {
+    margin: 32px 0 48px;
+    overflow-x: auto;
+    border: 1px solid var(--rule);
+    border-radius: 6px;
+    background: var(--bg-elev);
+  }
+  table.grid {
+    width: 100%;
+    border-collapse: collapse;
+    font-family: var(--sans);
+    font-size: 13px;
+    min-width: 720px;
+  }
+  table.grid th,
+  table.grid td {
+    text-align: left;
+    padding: 14px 14px;
+    border-bottom: 1px solid var(--rule);
+    line-height: 1.5;
+  }
+  table.grid thead th {
+    background: var(--bg-cell);
+    color: var(--ink-muted);
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    font-size: 11px;
+    border-bottom: 1px solid var(--rule-warm);
+  }
+  table.grid tbody tr:last-child td { border-bottom: none; }
+  table.grid tbody tr:hover { background: rgba(212, 165, 116, 0.025); }
+  table.grid td.row-label {
+    font-family: var(--serif);
+    font-size: 15px;
+    font-weight: 500;
+    color: var(--ink);
+    letter-spacing: -0.005em;
+  }
+  table.grid td.row-label small {
+    display: block;
+    font-family: var(--sans);
+    font-size: 11px;
+    font-weight: 400;
+    color: var(--ink-muted);
+    letter-spacing: 0.05em;
+    margin-top: 2px;
+  }
+  .num { font-family: var(--mono); color: var(--ink); }
+  .num-good { font-family: var(--mono); color: var(--good); font-weight: 600; }
+  .num-warn { font-family: var(--mono); color: var(--warn); }
+  .num-bad  { font-family: var(--mono); color: var(--bad); }
+  .num-na   { font-family: var(--mono); color: var(--ink-muted); }
+  .yes { color: var(--good); }
+  .no  { color: var(--bad); }
+  .par { color: var(--note); }
+
+  /* Dimension blocks */
+  .dim {
+    margin: 36px 0;
+    padding: 26px 28px;
+    background: var(--bg-elev);
+    border: 1px solid var(--rule);
+    border-radius: 6px;
+  }
+  .dim h3 {
+    font-family: var(--serif);
+    font-size: 22px;
+    font-weight: 500;
+    margin: 0 0 6px;
+    letter-spacing: -0.01em;
+  }
+  .dim .matters {
+    font-family: var(--sans);
+    font-size: 12px;
+    color: var(--ink-muted);
+    letter-spacing: 0.04em;
+    margin-bottom: 18px;
+  }
+  .dim .matters strong { color: var(--accent); font-weight: 600; }
+  .dim p { font-size: 16px; margin: 0 0 14px; color: var(--ink-dim); }
+  .dim ul { margin: 0; padding-left: 22px; }
+  .dim li { font-size: 15px; line-height: 1.6; color: var(--ink-dim); margin-bottom: 8px; }
+  .dim li strong { color: var(--ink); font-weight: 600; }
+
+  .source-note {
+    margin-top: 14px; padding-top: 12px;
+    border-top: 1px dashed var(--rule);
+    font-family: var(--sans);
+    font-size: 11px;
+    color: var(--ink-muted);
+    letter-spacing: 0.02em;
+    line-height: 1.6;
+  }
+  .source-note a { color: var(--ink-dim); text-decoration: none; border-bottom: 1px solid transparent; }
+  .source-note a:hover { color: var(--accent); border-bottom-color: var(--accent-dim); }
+
+  /* TPMM gap box */
+  .gap {
+    margin: 48px 0;
+    padding: 32px 36px;
+    background: var(--bg-elev);
+    border: 1px solid var(--rule-warm);
+    border-radius: 6px;
+  }
+  .gap .label {
+    font-family: var(--sans);
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 16px;
+  }
+  .gap ol { padding-left: 24px; margin: 0; }
+  .gap li {
+    font-family: var(--serif);
+    font-size: 16px;
+    line-height: 1.65;
+    color: var(--ink-dim);
+    margin-bottom: 18px;
+  }
+  .gap li strong { color: var(--ink); font-weight: 600; }
+  .gap li:last-child { margin-bottom: 0; }
+
+  /* Verdict */
+  .verdict {
+    margin: 56px 0 0;
+    padding: 36px 40px;
+    background: linear-gradient(180deg, rgba(212, 165, 116, 0.06) 0%, rgba(212, 165, 116, 0) 100%);
+    border: 1px solid var(--rule-warm);
+    border-radius: 6px;
+  }
+  .verdict .label {
+    font-family: var(--sans); font-size: 11px;
+    letter-spacing: 0.2em; text-transform: uppercase;
+    color: var(--accent); margin-bottom: 18px;
+  }
+  .verdict p {
+    font-family: var(--serif);
+    font-size: 18px;
+    line-height: 1.6;
+    color: var(--ink);
+    margin: 0 0 14px;
+  }
+  .verdict p:last-child { margin: 0; color: var(--ink-dim); font-size: 16px; }
+
+  .closer {
+    margin-top: 56px; padding-top: 32px;
+    border-top: 1px solid var(--rule);
+  }
+  .closer p { color: var(--ink-dim); font-size: 17px; }
+  .closer a {
+    color: var(--accent); text-decoration: none;
+    border-bottom: 1px solid var(--accent-dim);
+  }
+  .closer a:hover { border-bottom-color: var(--accent); }
+
+  footer.essay {
+    margin-top: 80px; padding-top: 28px;
+    border-top: 1px solid var(--rule);
+    font-family: var(--sans); font-size: 12px;
+    color: var(--ink-muted); line-height: 1.6;
+  }
+  footer.essay a { color: var(--ink-dim); text-decoration: none; border-bottom: 1px solid transparent; }
+  footer.essay a:hover { color: var(--accent); border-bottom-color: var(--accent-dim); }
+
+  @media (max-width: 700px) {
+    .container { padding: 32px 18px 64px; }
+    .dim, .gap, .verdict { padding: 22px 20px; }
+  }
+
+  @media print {
+    html, body { background: white; color: black; font-size: 13px; }
+    .container { max-width: none; padding: 24px; }
+    .summary, .dim, .gap, .verdict, .methodology, table.grid thead th {
+      background: white; border-color: #ccc;
+    }
+    nav.top, footer.essay { display: none; }
+    a { color: black; text-decoration: underline; }
+    .num-good, .num-warn, .num-bad, .num-na, .num, .yes, .no, .par { color: black; }
+    h1, h2.section, .kicker, .dim h3, .gap .label, .verdict .label { color: black; }
+  }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <nav class="top">
+    <a href="../">← parallel.kevin.energy</a>
+    <span>Battlecard 03 / 03</span>
+  </nav>
+
+  <header class="essay">
+    <div class="kicker">Comparative Analysis · Four Agentic-Research APIs</div>
+    <h1>Same Task, Four APIs, Audited</h1>
+    <p class="deck">A read on Parallel Task, Exa Research, Perplexity Deep Research, and Tavily Search — built from published benchmarks, structured the way a TPMM would ship the comparison in their first month on the job.</p>
+    <div class="byline"><strong>Kevin Nguyen</strong> · May 2026 · ~6 min read · printable</div>
+  </header>
+
+  <div class="methodology">
+    <strong>Methodology</strong>
+    <p>Numbers in this battlecard are drawn from public sources: Parallel's published benchmark posts (BrowseComp evaluation Jun 10–12, 2025), competitors' own published materials, and recent market research compiled from M&amp;A filings and developer-tool docs. Sources cited per row.</p>
+    <p>I did not personally re-run the benchmarks. The framing, the scoring rubric, and the "what I'd audit beyond this bench" section reflect what a TPMM would publish in their first month — a methodology-rigorous read of the public claims, not a re-execution of the test suite.</p>
+  </div>
+
+  <!-- ─── Summary grid ─── -->
+  <h2 class="section">The Audit at a Glance</h2>
+
+  <div class="summary">
+    <table class="grid">
+      <thead>
+        <tr>
+          <th>API</th>
+          <th>BrowseComp<br/><small style="font-weight:400;color:var(--ink-muted);">accuracy</small></th>
+          <th>BrowseComp<br/><small style="font-weight:400;color:var(--ink-muted);">cost per 1K</small></th>
+          <th>Per-field<br/>confidence</th>
+          <th>Citation<br/>density</th>
+          <th>Index<br/>independence</th>
+          <th>M&amp;A<br/>posture</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="row-label">Parallel Task<br /><small>Ultra processor</small></td>
+          <td><span class="num-good">27%</span></td>
+          <td><span class="num">$300</span></td>
+          <td class="yes">✓ Basis</td>
+          <td class="yes">✓ per-field</td>
+          <td class="yes">✓ proprietary</td>
+          <td class="yes">independent</td>
+        </tr>
+        <tr>
+          <td class="row-label">Parallel Task<br /><small>1200 processor</small></td>
+          <td><span class="num-good">48%</span></td>
+          <td><span class="num">$1,200</span></td>
+          <td class="yes">✓ Basis</td>
+          <td class="yes">✓ per-field</td>
+          <td class="yes">✓ proprietary</td>
+          <td class="yes">independent</td>
+        </tr>
+        <tr>
+          <td class="row-label">Exa Research</td>
+          <td><span class="num-warn">14%</span></td>
+          <td><span class="num">$275</span></td>
+          <td class="no">✗</td>
+          <td class="par">partial</td>
+          <td class="yes">✓ proprietary</td>
+          <td class="yes">independent</td>
+        </tr>
+        <tr>
+          <td class="row-label">Perplexity Sonar<br /><small>Deep Research tier</small></td>
+          <td><span class="num-bad">8%</span></td>
+          <td><span class="num">$880</span></td>
+          <td class="no">✗</td>
+          <td class="par">partial</td>
+          <td class="par">hybrid</td>
+          <td class="yes">independent</td>
+        </tr>
+        <tr>
+          <td class="row-label">Tavily Search<br /><small>Research mode</small></td>
+          <td class="num-na">not published</td>
+          <td><span class="num">~$5–8</span></td>
+          <td class="no">✗</td>
+          <td class="par">snippet-level</td>
+          <td class="no">3rd-party indices</td>
+          <td class="no">acquired Feb 2026</td>
+        </tr>
+        <tr>
+          <td class="row-label">Reference benchmarks</td>
+          <td colspan="6" style="color: var(--ink-muted); font-family: var(--mono); font-size: 12px;">
+            Human experts ≈ 25% &nbsp;·&nbsp; GPT-4.1 + browsing = 1% &nbsp;·&nbsp; Claude Sonnet 4 + search = 6% &nbsp;·&nbsp; OpenAI Deep Research Agent = 51.5% <em>(not API-available)</em>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- ─── Dimensions ─── -->
+  <h2 class="section">The Six Dimensions That Matter</h2>
+
+  <div class="dim">
+    <h3>1. Accuracy under adversarial load</h3>
+    <div class="matters"><strong>Why it matters →</strong> Easy queries don't stress the index. BrowseComp's 1,266 multi-hop questions are designed to find the seams between retrieval, reasoning, and freshness — the failure modes that matter in production.</div>
+    <ul>
+      <li><strong>Parallel Task Ultra: 27% / 600: 39% / 1200: 48%.</strong> A linear price-accuracy frontier the rest of the field doesn't have an answer to. The 1200 processor exceeds human-expert performance (≈25%) on a benchmark designed to be hard for humans.</li>
+      <li><strong>Exa Research: 14%.</strong> Neural-only ranking trades precision for semantic similarity. Strong on long-tail discovery, weaker on adversarial fact-grounding.</li>
+      <li><strong>Perplexity Deep Research: 8%.</strong> Built for chat-shaped synthesis, not benchmark-shaped fact retrieval. The same product surface that wins on user-facing answers loses on agent-grade audit.</li>
+      <li><strong>Tavily: not published.</strong> Positions on developer ergonomics, not eval-grounded accuracy. The absence of an own-bench is a signal in itself.</li>
+    </ul>
+    <div class="source-note">Source: <a href="https://parallel.ai/blog/deep-research">parallel.ai/blog/deep-research</a> · BrowseComp evaluation window Jun 10–12, 2025 · 100-question random subset from the 1,266 problem set.</div>
+  </div>
+
+  <div class="dim">
+    <h3>2. Per-field confidence (a.k.a. Basis)</h3>
+    <div class="matters"><strong>Why it matters →</strong> Production agents need to route work conditionally. A single confidence score on the response is not a routing primitive; per-field confidence is. This is the dimension that turns "useful API" into "infrastructure."</div>
+    <ul>
+      <li><strong>Parallel: ships Basis on every Task field.</strong> Every output value carries its own citation and confidence score, queryable via <code>result.output.basis</code>. This is the differentiated primitive — and as of May 2026, no competing API in this set publishes one.</li>
+      <li><strong>Exa, Perplexity, Tavily: return cited results, no per-field calibration.</strong> The agent can see <em>that</em> a fact was cited, not <em>how confident</em> the system is in it. Routing logic has to be invented downstream.</li>
+    </ul>
+    <div class="source-note">Source: <a href="https://parallel.ai/blog/basis">parallel.ai/blog/basis</a> (Introducing Basis with Calibrated Confidences); per-field absence verified against competitors' published response schemas.</div>
+  </div>
+
+  <div class="dim">
+    <h3>3. Citation density and traceability</h3>
+    <div class="matters"><strong>Why it matters →</strong> "Cited" can mean three different things: the API returns a source URL, returns a passage, or returns a passage that actually supports the claim. The third is the only one that survives auditing.</div>
+    <ul>
+      <li><strong>Parallel: per-field citation, per-claim passage, queryable basis.</strong> Audit trail is built into the output shape.</li>
+      <li><strong>Exa: page-level citation, no claim-to-passage binding.</strong> The agent gets the URL but has to re-fetch and re-extract to bind the claim. That work moves the cleanup to the developer.</li>
+      <li><strong>Perplexity: snippet citations with partial claim-passage binding.</strong> Strong for user-facing display, weaker for agent-grade verification. The Columbia Journalism Review and GPTZero have both flagged Perplexity for fabricated quotes citing legitimate URLs — a "second-hand hallucination" failure mode that compounds when agents read agent output.</li>
+      <li><strong>Tavily: snippet-level citation only.</strong> Designed for the LangChain quickstart pattern, not for production audit.</li>
+    </ul>
+    <div class="source-note">Source: GPTZero–Perplexity investigation (gptzero.me); competitor response schemas (docs.tavily.com, docs.exa.ai).</div>
+  </div>
+
+  <div class="dim">
+    <h3>4. Index independence vs. scraper-stack risk</h3>
+    <div class="matters"><strong>Why it matters →</strong> An API that re-ranks another company's index is exposed to that company's terms of service, pricing, and lawsuits. The Dec 2025 Google-vs-SerpAPI case made the abstract risk concrete.</div>
+    <ul>
+      <li><strong>Parallel: proprietary index.</strong> Refresh cadence is contractual. No third-party ToS exposure.</li>
+      <li><strong>Exa: proprietary index.</strong> Strong on this dimension. Series B at $700M (Sept 2025, Benchmark-led) reinforces the independence narrative.</li>
+      <li><strong>Perplexity: hybrid.</strong> Mixes proprietary crawl with third-party signals. Less exposed than pure aggregators, more exposed than pure-index plays.</li>
+      <li><strong>Tavily: rides on third-party indices.</strong> Brave-and-Bing-derived re-ranking is fast and cheap until the underlying provider changes terms or pricing. Brave killed its free tier in 2025; SerpAPI is in litigation. This is the highest-exposure rung of the four.</li>
+    </ul>
+    <div class="source-note">Sources: Google v. SerpAPI (Dec 19, 2025); Brave Search API tier change; Exa Series B announcement.</div>
+  </div>
+
+  <div class="dim">
+    <h3>5. Compliance posture for regulated buyers</h3>
+    <div class="matters"><strong>Why it matters →</strong> The agent-infra purchase is now table-stakes-gated on SOC2 Type 2. The buyers who pay 5–10× the commodity rate also require deterministic provenance per claim — exactly the surface Basis exposes.</div>
+    <ul>
+      <li><strong>Parallel: SOC2 Type 2, deterministic per-field provenance.</strong> Positioned for the regulated-vertical SKU emerging in 2026 (finance, legal, healthcare).</li>
+      <li><strong>Exa: ZDR (zero-data retention) for enterprise.</strong> SOC2 status less publicly surfaced than Parallel's.</li>
+      <li><strong>Perplexity: enterprise tier with compliance, but consumer-product brand risk in regulated procurement.</strong></li>
+      <li><strong>Tavily: post-Nebius acquisition, compliance posture rolls up into a GPU-cloud parent.</strong> Reasonable on paper, friction in enterprise procurement reviews that ask "wait, who actually owns this?"</li>
+    </ul>
+    <div class="source-note">Sources: vendor security pages; SOC2 status verified via vendor trust portals where public.</div>
+  </div>
+
+  <div class="dim">
+    <h3>6. M&amp;A and platform-risk posture</h3>
+    <div class="matters"><strong>Why it matters →</strong> Three of the four competitors are now adjacent to platform consolidation. The 2026 question for any agent-infra buyer is not "which is best today" but "which will still be an independent vendor in two years."</div>
+    <ul>
+      <li><strong>Parallel: independent. $2B valuation (highest in the pure-play category).</strong> No announced M&amp;A; no captive distribution lock-in.</li>
+      <li><strong>Exa: independent, but in the gravitational well of NVIDIA (NVentures investor) and the model labs.</strong></li>
+      <li><strong>Perplexity: standalone, but center-of-gravity is the consumer answer engine and the Comet browser. API is a secondary business.</strong></li>
+      <li><strong>Tavily: acquired by Nebius Feb 10, 2026 ($275M–$400M).</strong> Brand continues; ownership is now a GPU cloud. Every Tavily renewal in 2026 is a "switch-cost vs. switch-risk" conversation.</li>
+    </ul>
+    <div class="source-note">Sources: Bloomberg (Feb 10, 2026); Nebius announcement; Exa Series B; Perplexity company materials.</div>
+  </div>
+
+  <!-- ─── TPMM Gap section ─── -->
+  <div class="gap">
+    <div class="label">What I'd audit beyond this bench · The TPMM rewrite</div>
+    <ol>
+      <li><strong>Re-run BrowseComp on the full 1,266-question set, not the 100-question subset.</strong> A 100-question random draw is fine for vendor marketing but leaves enough variance that a competitor could legitimately claim sampling noise. The full set is the only version that lands in an enterprise procurement review without follow-up questions.</li>
+      <li><strong>Add a calibration plot, not just an accuracy number.</strong> The Basis differentiation only matters if the confidence scores are calibrated — i.e., when the API says 0.9, the fact is right 90% of the time. A reliability diagram per processor would be the strongest single artifact Parallel could publish; nobody else in the category can produce one.</li>
+      <li><strong>Score hallucination rate as a distinct dimension from accuracy.</strong> An API can be 14% accurate and 14% hallucinating (Exa pattern) or 14% accurate and 86% honest-no-answer (different product). Production teams care about the difference; the BrowseComp leaderboard collapses it.</li>
+      <li><strong>Add a "freshness latency" column.</strong> How long after a fact becomes public does the API return it? Brave-via-Anthropic is opaque on refresh; Parallel's contractual refresh is the strongest answer in the category but has never been benchmarked in head-to-head terms. This is one of the cleanest TPMM-ownable launches.</li>
+      <li><strong>Audit contamination explicitly.</strong> Anthropic's own analysis found 9 BrowseComp answers leaked onto the public web — meaning a model-with-browsing can score on memorization rather than reasoning. A clean bench should flag and exclude contaminated rows. Parallel should publish the contamination-adjusted score; the competitors who don't will lose the credibility race once enterprise auditors notice.</li>
+    </ol>
+  </div>
+
+  <!-- ─── Verdict ─── -->
+  <div class="verdict">
+    <div class="label">The verdict</div>
+    <p>On the dimensions that matter to a production agent — accuracy under load, per-field confidence, traceable citations, independent index, regulated-buyer compliance, and platform-risk posture — Parallel leads the field as of May 2026. Not on every dimension by a wide margin, but on the combination, and especially on the dimension nobody else publishes against: <em>calibrated confidence as a first-class output</em>.</p>
+    <p>The reservation: most of these numbers are vendor-published. The single highest-leverage move for Parallel's marketing in the next quarter is to fund and publish an independently-audited rerun on the full BrowseComp set, with calibration plots and contamination-exclusion. That artifact is what converts the lead from "leading on benchmarks Parallel chose" to "leading on the bench the rest of the industry has to answer to." It is also the thing a TPMM should be asking to ship by week four.</p>
+  </div>
+
+  <div class="closer">
+    <p>Read back: <a href="../essay/">The Essay</a> &mdash; for the category frame this battlecard scores against. <a href="../demo/">The Workflow</a> &mdash; for what the winner's product surface actually looks like in flight.</p>
+  </div>
+
+  <footer class="essay">
+    <p>By <a href="https://kevin.energy">Kevin Nguyen</a>. Written in May 2026 while preparing for a Technical Product Marketing Manager interview at <a href="https://parallel.ai">Parallel Web Systems</a>. Source on <a href="https://github.com/kevinnguyen805/parallel-tpmm-demos">GitHub</a>. Not affiliated with or endorsed by Parallel; all views the author's own.</p>
+  </footer>
+
+</div>
+</body>
+</html>

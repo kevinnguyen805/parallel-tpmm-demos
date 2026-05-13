@@ -1,0 +1,625 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>From Brief to Outreach: A Workflow Wired in Public</title>
+<meta name="description" content="One agent workflow, four Parallel APIs, end to end. FindAll → Task Enrichment → Monitor → Search, traced as a single run." />
+<meta name="author" content="Kevin Nguyen" />
+<meta property="og:title" content="From Brief to Outreach: A Workflow Wired in Public" />
+<meta property="og:description" content="An illustrated agent workflow wiring four Parallel APIs end to end." />
+<meta property="og:type" content="article" />
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='40' fill='%23d4a574'/%3E%3C/svg%3E" />
+<style>
+  :root {
+    --bg: #0a0a0b;
+    --bg-elev: #131316;
+    --bg-code: #0e0e11;
+    --rule: #1f1f24;
+    --rule-warm: #2d251a;
+    --ink: #e8e8ea;
+    --ink-dim: #9c9ca3;
+    --ink-muted: #6c6c74;
+    --accent: #d4a574;
+    --accent-dim: #8a6d4d;
+    --good: #79c590;
+    --note: #8aa5d4;
+    --serif: ui-serif, 'Iowan Old Style', 'Apple Garamond', Georgia, Cambria, 'Times New Roman', serif;
+    --sans: ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Inter, sans-serif;
+    --mono: ui-monospace, 'SF Mono', Menlo, Monaco, Consolas, monospace;
+  }
+  * { box-sizing: border-box; }
+  html, body {
+    margin: 0; padding: 0;
+    background: var(--bg);
+    color: var(--ink);
+    font-family: var(--serif);
+    font-size: 18px;
+    line-height: 1.7;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+  .container { max-width: 760px; margin: 0 auto; padding: 64px 24px 96px; }
+
+  nav.top {
+    font-family: var(--sans);
+    font-size: 13px;
+    color: var(--ink-muted);
+    letter-spacing: 0.02em;
+    margin-bottom: 64px;
+    display: flex; justify-content: space-between; align-items: center;
+  }
+  nav.top a {
+    color: var(--ink-dim); text-decoration: none;
+    border-bottom: 1px solid transparent;
+    transition: border-color 120ms ease, color 120ms ease;
+  }
+  nav.top a:hover { color: var(--accent); border-bottom-color: var(--accent-dim); }
+
+  header.essay { margin-bottom: 48px; }
+  .kicker {
+    font-family: var(--sans);
+    font-size: 12px; letter-spacing: 0.18em; text-transform: uppercase;
+    color: var(--accent); margin-bottom: 24px;
+  }
+  h1 {
+    font-family: var(--serif); font-weight: 500;
+    font-size: clamp(34px, 6vw, 52px);
+    line-height: 1.08; letter-spacing: -0.015em;
+    margin: 0 0 28px;
+  }
+  .deck {
+    font-family: var(--serif); font-style: italic;
+    font-size: 21px; line-height: 1.5;
+    color: var(--ink-dim); margin: 0 0 28px;
+  }
+  .byline {
+    font-family: var(--sans); font-size: 13px;
+    color: var(--ink-muted); letter-spacing: 0.02em;
+  }
+  .byline strong { color: var(--ink-dim); font-weight: 500; }
+
+  /* Methodology callout */
+  .methodology {
+    margin: 40px 0 48px;
+    padding: 20px 22px;
+    background: rgba(212, 165, 116, 0.04);
+    border-left: 3px solid var(--accent-dim);
+    border-radius: 0 4px 4px 0;
+    font-family: var(--sans); font-size: 14px;
+    line-height: 1.6;
+    color: var(--ink-dim);
+  }
+  .methodology strong {
+    color: var(--accent); font-weight: 600;
+    letter-spacing: 0.08em; text-transform: uppercase;
+    font-size: 11px; display: block; margin-bottom: 6px;
+  }
+
+  /* Brief block */
+  .brief {
+    margin: 48px 0;
+    padding: 32px 36px;
+    background: var(--bg-elev);
+    border: 1px solid var(--rule);
+    border-radius: 6px;
+  }
+  .brief-label {
+    font-family: var(--sans); font-size: 11px;
+    letter-spacing: 0.2em; text-transform: uppercase;
+    color: var(--accent); margin-bottom: 14px;
+  }
+  .brief blockquote {
+    margin: 0; font-family: var(--serif);
+    font-size: 19px; line-height: 1.55;
+    color: var(--ink); font-style: italic;
+  }
+
+  /* Section heads */
+  h2.section {
+    font-family: var(--sans); font-weight: 600;
+    font-size: 14px; letter-spacing: 0.16em;
+    text-transform: uppercase; color: var(--accent);
+    margin: 64px 0 20px;
+  }
+
+  /* Stage blocks */
+  .stage {
+    margin: 40px 0;
+    padding: 28px 28px 24px;
+    background: var(--bg-elev);
+    border: 1px solid var(--rule);
+    border-radius: 6px;
+    position: relative;
+  }
+  .stage-num {
+    position: absolute; top: -12px; left: 24px;
+    background: var(--bg);
+    padding: 0 12px;
+    font-family: var(--sans);
+    font-size: 11px; font-weight: 600;
+    letter-spacing: 0.16em; text-transform: uppercase;
+    color: var(--accent);
+  }
+  .stage-title {
+    font-family: var(--serif);
+    font-size: 22px; font-weight: 500;
+    margin: 4px 0 8px;
+    color: var(--ink);
+    letter-spacing: -0.01em;
+  }
+  .stage-sub {
+    font-family: var(--sans); font-size: 12px;
+    letter-spacing: 0.1em; text-transform: uppercase;
+    color: var(--ink-muted); margin-bottom: 16px;
+  }
+  .stage-sub .pill {
+    display: inline-block;
+    padding: 2px 8px; margin-right: 6px;
+    border: 1px solid var(--rule-warm);
+    border-radius: 99px;
+    color: var(--accent);
+  }
+  .stage-sub .elapsed { color: var(--good); }
+  .stage-why {
+    font-family: var(--serif); font-size: 16px;
+    line-height: 1.6; color: var(--ink-dim);
+    margin: 0 0 22px;
+  }
+
+  /* Code blocks */
+  .code-label {
+    font-family: var(--sans); font-size: 11px;
+    letter-spacing: 0.14em; text-transform: uppercase;
+    color: var(--ink-muted); margin: 20px 0 6px;
+  }
+  pre {
+    margin: 0 0 12px;
+    padding: 16px 20px;
+    background: var(--bg-code);
+    border: 1px solid var(--rule);
+    border-radius: 4px;
+    font-family: var(--mono);
+    font-size: 13px; line-height: 1.55;
+    color: var(--ink-dim);
+    overflow-x: auto;
+    white-space: pre;
+  }
+  pre .k { color: var(--accent); }                /* keys */
+  pre .s { color: var(--good); }                  /* strings */
+  pre .n { color: var(--note); }                  /* numbers */
+  pre .c { color: var(--ink-muted); font-style: italic; }  /* comments */
+  pre .endpoint { color: var(--accent); font-weight: 600; }
+  pre .method   { color: var(--good); font-weight: 600; }
+
+  .handoff {
+    margin-top: 16px;
+    padding: 12px 16px;
+    border-top: 1px dashed var(--rule);
+    font-family: var(--sans); font-size: 13px;
+    color: var(--ink-muted); line-height: 1.6;
+  }
+  .handoff strong { color: var(--accent); font-weight: 600; letter-spacing: 0.04em; }
+
+  /* Trigger inflection */
+  .trigger {
+    margin: 56px -8px;
+    padding: 32px 36px;
+    background: linear-gradient(180deg, rgba(212, 165, 116, 0.08) 0%, rgba(212, 165, 116, 0.02) 100%);
+    border: 1px solid var(--rule-warm);
+    border-radius: 6px;
+    text-align: center;
+  }
+  .trigger-tag {
+    font-family: var(--sans); font-size: 11px;
+    letter-spacing: 0.22em; text-transform: uppercase;
+    color: var(--accent); margin-bottom: 14px;
+  }
+  .trigger p {
+    margin: 0; font-family: var(--serif);
+    font-size: 22px; line-height: 1.4;
+    color: var(--ink); font-style: italic;
+  }
+  .trigger small {
+    display: block; margin-top: 10px;
+    font-family: var(--mono); font-size: 12px;
+    color: var(--ink-muted); font-style: normal;
+  }
+
+  /* Final artifact */
+  .artifact {
+    margin: 48px 0;
+    padding: 32px;
+    background: #0f0f12;
+    border: 1px solid var(--rule);
+    border-radius: 6px;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.4);
+  }
+  .artifact-meta {
+    font-family: var(--mono); font-size: 12px;
+    color: var(--ink-muted); margin-bottom: 18px;
+    padding-bottom: 14px; border-bottom: 1px solid var(--rule);
+    line-height: 1.7;
+  }
+  .artifact-meta span { color: var(--ink-dim); }
+  .artifact-body {
+    font-family: var(--serif); font-size: 16px;
+    line-height: 1.7; color: var(--ink);
+  }
+  .artifact-body p { margin: 0 0 16px; }
+  .cite {
+    color: var(--accent);
+    font-family: var(--mono); font-size: 11px;
+    vertical-align: super;
+    margin-left: 1px;
+    cursor: help;
+    text-decoration: none;
+    border-bottom: 1px dotted var(--accent-dim);
+  }
+  .citations {
+    margin-top: 24px; padding-top: 18px;
+    border-top: 1px dashed var(--rule);
+    font-family: var(--sans); font-size: 12px;
+    color: var(--ink-muted); line-height: 1.7;
+  }
+  .citations ol { margin: 0; padding-left: 20px; }
+  .citations li { margin-bottom: 4px; }
+  .citations .src {
+    color: var(--ink-dim);
+    font-family: var(--mono);
+  }
+  .citations .conf {
+    color: var(--accent);
+    font-family: var(--mono);
+    margin-left: 6px;
+  }
+
+  /* Closer bullets */
+  .takeaways {
+    margin: 56px 0 0;
+    padding: 32px 36px;
+    background: var(--bg-elev);
+    border: 1px solid var(--rule);
+    border-radius: 6px;
+  }
+  .takeaways-label {
+    font-family: var(--sans); font-size: 11px;
+    letter-spacing: 0.18em; text-transform: uppercase;
+    color: var(--accent); margin-bottom: 18px;
+  }
+  .takeaways ul { margin: 0; padding-left: 22px; }
+  .takeaways li {
+    font-family: var(--serif); font-size: 16px;
+    line-height: 1.65; color: var(--ink-dim);
+    margin-bottom: 12px;
+  }
+  .takeaways li strong { color: var(--ink); font-weight: 500; }
+  .takeaways li:last-child { margin-bottom: 0; }
+
+  .closer {
+    margin-top: 56px; padding-top: 32px;
+    border-top: 1px solid var(--rule);
+  }
+  .closer p { color: var(--ink-dim); font-size: 17px; }
+  .closer a {
+    color: var(--accent); text-decoration: none;
+    border-bottom: 1px solid var(--accent-dim);
+  }
+  .closer a:hover { border-bottom-color: var(--accent); }
+
+  footer.essay {
+    margin-top: 80px; padding-top: 28px;
+    border-top: 1px solid var(--rule);
+    font-family: var(--sans); font-size: 12px;
+    color: var(--ink-muted); line-height: 1.6;
+  }
+  footer.essay a { color: var(--ink-dim); text-decoration: none; border-bottom: 1px solid transparent; }
+  footer.essay a:hover { color: var(--accent); border-bottom-color: var(--accent-dim); }
+
+  @media (max-width: 640px) {
+    .container { padding: 32px 20px 64px; }
+    .brief, .stage, .artifact, .takeaways, .trigger { padding: 22px 20px; }
+    pre { font-size: 12px; padding: 14px 16px; }
+  }
+
+  @media print {
+    html, body { background: white; color: black; }
+    .stage, .brief, .artifact, .takeaways, .methodology { background: white; border-color: #ccc; }
+    pre { background: #f6f6f6; border-color: #ddd; color: #222; }
+    nav.top, footer.essay { display: none; }
+  }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <nav class="top">
+    <a href="../">← parallel.kevin.energy</a>
+    <span>Demo 02 / 03</span>
+  </nav>
+
+  <header class="essay">
+    <div class="kicker">Workflow Trace · Five Primitives in One Run</div>
+    <h1>From Brief to Outreach: A Workflow Wired in Public</h1>
+    <p class="deck">One agent, four APIs, one job. A worked example of what an agent built on Parallel's surface actually does between the trigger event and the drafted reply.</p>
+    <div class="byline"><strong>Kevin Nguyen</strong> · May 2026 · ~7 min read</div>
+  </header>
+
+  <div class="methodology">
+    <strong>Methodology</strong>
+    Sample outputs in this trace are constructed from Parallel's documented API surface. Call shapes, response schemas, and field names match the production API. Company names in the trace are fictional. The workflow is real; the run is illustrative — a faithful reconstruction of what an agent built on this stack does.
+  </div>
+
+  <div class="brief">
+    <div class="brief-label">The Brief</div>
+    <blockquote>
+      "Wake me when a Series-B AI infrastructure company hires a new VP Engineering. I want an enriched company record, the new hire's background, and three grounded hooks for a same-day outreach — every fact traceable to a citation the SDR can paste back into the email."
+    </blockquote>
+  </div>
+
+  <h2 class="section">The Pipeline · Four APIs, One Loop</h2>
+
+  <!-- ─── Stage 1: SOURCE / FindAll ─── -->
+  <div class="stage">
+    <div class="stage-num">Stage 01</div>
+    <h3 class="stage-title">Source the watchlist</h3>
+    <div class="stage-sub">
+      <span class="pill">Source</span><span>FindAll API</span>
+      <span class="elapsed" style="float:right;">⏱ 11.2s · 50 candidates</span>
+    </div>
+    <p class="stage-why">The agent does not start with a CRM list. It starts with a brief. Stage 1 turns the brief into a verified list of entities that match — companies in the right stage, the right vertical, the right geography. No CSV upload, no scraped Crunchbase, no manual filter.</p>
+
+    <div class="code-label">Request</div>
+<pre><span class="method">POST</span> <span class="endpoint">https://api.parallel.ai/v1/findall/runs</span>
+{
+  <span class="k">"objective"</span>: <span class="s">"Series B AI-infrastructure startups, US-based,</span>
+                <span class="s">post-2022 founding, building infra not apps"</span>,
+  <span class="k">"entity_type"</span>: <span class="s">"company"</span>,
+  <span class="k">"match_conditions"</span>: [
+    <span class="s">"raised $30M-$100M Series B"</span>,
+    <span class="s">"primary product is developer infrastructure"</span>,
+    <span class="s">"US-headquartered"</span>,
+    <span class="s">"founded 2022 or later"</span>
+  ],
+  <span class="k">"match_limit"</span>: <span class="n">50</span>,
+  <span class="k">"generator"</span>: <span class="s">"core"</span>
+}</pre>
+
+    <div class="code-label">Response — 50 candidates returned, first three shown</div>
+<pre>{
+  <span class="k">"run_id"</span>: <span class="s">"fa_run_2YQk...8nP"</span>,
+  <span class="k">"matches"</span>: [
+    {
+      <span class="k">"name"</span>: <span class="s">"Cogent Labs"</span>,
+      <span class="k">"url"</span>: <span class="s">"https://cogent.ai"</span>,
+      <span class="k">"description"</span>: <span class="s">"Vector retrieval infra for production agents"</span>,
+      <span class="k">"basis"</span>: {
+        <span class="k">"matched_conditions"</span>: [<span class="s">"series_b"</span>, <span class="s">"dev_infra"</span>, <span class="s">"us_hq"</span>, <span class="s">"post_2022"</span>],
+        <span class="k">"confidence"</span>: <span class="n">0.94</span>
+      }
+    },
+    {
+      <span class="k">"name"</span>: <span class="s">"Anvil AI"</span>,
+      <span class="k">"url"</span>: <span class="s">"https://anvil-ai.com"</span>,
+      <span class="k">"description"</span>: <span class="s">"Distributed inference runtime for OSS models"</span>,
+      <span class="k">"basis"</span>: {
+        <span class="k">"matched_conditions"</span>: [<span class="s">"series_b"</span>, <span class="s">"dev_infra"</span>, <span class="s">"us_hq"</span>, <span class="s">"post_2022"</span>],
+        <span class="k">"confidence"</span>: <span class="n">0.91</span>
+      }
+    },
+    {
+      <span class="k">"name"</span>: <span class="s">"Praxis Embeddings"</span>,
+      <span class="k">"url"</span>: <span class="s">"https://praxis.dev"</span>,
+      <span class="k">"description"</span>: <span class="s">"Domain-specialized embedding models as a service"</span>,
+      <span class="k">"basis"</span>: {
+        <span class="k">"matched_conditions"</span>: [<span class="s">"series_b"</span>, <span class="s">"dev_infra"</span>, <span class="s">"us_hq"</span>, <span class="s">"post_2022"</span>],
+        <span class="k">"confidence"</span>: <span class="n">0.87</span>
+      }
+    }
+    <span class="c">// ... 47 more</span>
+  ]
+}</pre>
+    <div class="handoff"><strong>Handoff →</strong> The 50 verified candidates become the input batch for Stage 2. Each carries a confidence floor; anything below 0.80 is held for human review before enrichment cost is spent.</div>
+  </div>
+
+  <!-- ─── Stage 2: REASON / Task Enrichment ─── -->
+  <div class="stage">
+    <div class="stage-num">Stage 02</div>
+    <h3 class="stage-title">Enrich each entity, with basis</h3>
+    <div class="stage-sub">
+      <span class="pill">Reason</span><span>Task API · Enrichment, processor=core</span>
+      <span class="elapsed" style="float:right;">⏱ 1m 47s · 50 records</span>
+    </div>
+    <p class="stage-why">Stage 2 takes the brief from a list of names to a structured dataset. The schema is the contract. Every field carries its own citation and confidence — the agent can route low-confidence fields to a second pass without recomputing the rest.</p>
+
+    <div class="code-label">Request — Group enrichment with explicit schema</div>
+<pre><span class="method">POST</span> <span class="endpoint">https://api.parallel.ai/v1/task/groups</span>
+{
+  <span class="k">"processor"</span>: <span class="s">"core"</span>,
+  <span class="k">"inputs"</span>: [<span class="c">/* the 50 FindAll matches */</span>],
+  <span class="k">"output_schema"</span>: {
+    <span class="k">"founded_year"</span>: <span class="s">"integer"</span>,
+    <span class="k">"total_funding_usd"</span>: <span class="s">"integer"</span>,
+    <span class="k">"series_b_lead_investor"</span>: <span class="s">"string"</span>,
+    <span class="k">"headcount_estimate"</span>: <span class="s">"integer"</span>,
+    <span class="k">"engineering_pct"</span>: <span class="s">"number"</span>,
+    <span class="k">"primary_tech_stack"</span>: <span class="s">"string[]"</span>,
+    <span class="k">"current_vp_engineering"</span>: <span class="s">"string | null"</span>
+  }
+}</pre>
+
+    <div class="code-label">Response — one enriched record (Cogent Labs)</div>
+<pre>{
+  <span class="k">"entity"</span>: <span class="s">"Cogent Labs"</span>,
+  <span class="k">"output"</span>: {
+    <span class="k">"founded_year"</span>: <span class="n">2023</span>,
+    <span class="k">"total_funding_usd"</span>: <span class="n">58000000</span>,
+    <span class="k">"series_b_lead_investor"</span>: <span class="s">"Andreessen Horowitz"</span>,
+    <span class="k">"headcount_estimate"</span>: <span class="n">38</span>,
+    <span class="k">"engineering_pct"</span>: <span class="n">0.71</span>,
+    <span class="k">"primary_tech_stack"</span>: [<span class="s">"Python"</span>, <span class="s">"Rust"</span>, <span class="s">"Postgres"</span>, <span class="s">"Kubernetes"</span>],
+    <span class="k">"current_vp_engineering"</span>: <span class="s">null</span>
+  },
+  <span class="k">"basis"</span>: {
+    <span class="k">"founded_year"</span>:           { <span class="k">"citation"</span>: <span class="s">"cogent.ai/about"</span>,        <span class="k">"confidence"</span>: <span class="n">0.99</span> },
+    <span class="k">"total_funding_usd"</span>:     { <span class="k">"citation"</span>: <span class="s">"techcrunch.com/2025-03-15"</span>, <span class="k">"confidence"</span>: <span class="n">0.96</span> },
+    <span class="k">"series_b_lead_investor"</span>: { <span class="k">"citation"</span>: <span class="s">"techcrunch.com/2025-03-15"</span>, <span class="k">"confidence"</span>: <span class="n">0.98</span> },
+    <span class="k">"headcount_estimate"</span>:    { <span class="k">"citation"</span>: <span class="s">"linkedin.com/company/cogent-labs"</span>, <span class="k">"confidence"</span>: <span class="n">0.82</span> },
+    <span class="k">"engineering_pct"</span>:       { <span class="k">"citation"</span>: <span class="s">"linkedin.com/company/cogent-labs/people"</span>, <span class="k">"confidence"</span>: <span class="n">0.74</span> },
+    <span class="k">"primary_tech_stack"</span>:    { <span class="k">"citation"</span>: <span class="s">"cogent.ai/careers/senior-engineer"</span>,    <span class="k">"confidence"</span>: <span class="n">0.88</span> },
+    <span class="k">"current_vp_engineering"</span>: { <span class="k">"citation"</span>: <span class="s">null</span>, <span class="k">"confidence"</span>: <span class="n">0.92</span>, <span class="k">"note"</span>: <span class="s">"role appears unfilled"</span> }
+  }
+}</pre>
+    <div class="handoff"><strong>Handoff →</strong> The <code>current_vp_engineering: null</code> with high confidence is the watchlist's most valuable field. Stage 3 sets a Monitor on exactly that change.</div>
+  </div>
+
+  <!-- ─── Stage 3: WATCH / Monitor ─── -->
+  <div class="stage">
+    <div class="stage-num">Stage 03</div>
+    <h3 class="stage-title">Watch for the trigger</h3>
+    <div class="stage-sub">
+      <span class="pill">Watch</span><span>Monitor API · frequency=1h</span>
+      <span class="elapsed" style="float:right;">⏱ Standing watch, 50 entities</span>
+    </div>
+    <p class="stage-why">Stage 3 is the most underrated primitive on the stack — and the one that turns the workflow from a one-shot job into a system. The agent does not poll Crunchbase. It registers an objective and gets a webhook when reality changes against it.</p>
+
+    <div class="code-label">Request — one Monitor per company, batched</div>
+<pre><span class="method">POST</span> <span class="endpoint">https://api.parallel.ai/v1/monitor/runs</span>
+{
+  <span class="k">"objective"</span>: <span class="s">"new hire announcement for VP Engineering,</span>
+                <span class="s">Head of Engineering, or CTO at Cogent Labs"</span>,
+  <span class="k">"frequency"</span>: <span class="s">"1h"</span>,
+  <span class="k">"processor"</span>: <span class="s">"base"</span>,
+  <span class="k">"webhook_url"</span>: <span class="s">"https://sdr-bench.kevin.energy/hooks/monitor"</span>,
+  <span class="k">"context"</span>: {
+    <span class="k">"entity_id"</span>: <span class="s">"cogent-labs"</span>,
+    <span class="k">"watch_type"</span>: <span class="s">"vpe_hire"</span>
+  }
+}</pre>
+
+    <div class="code-label">Response — event payload delivered to webhook (Wed 09:14 PT)</div>
+<pre>{
+  <span class="k">"event_id"</span>: <span class="s">"ev_7Wgr...3qC"</span>,
+  <span class="k">"monitor_id"</span>: <span class="s">"mon_4Pfn...2vK"</span>,
+  <span class="k">"detected_at"</span>: <span class="s">"2026-05-13T09:14:21Z"</span>,
+  <span class="k">"change_type"</span>: <span class="s">"role_filled"</span>,
+  <span class="k">"output"</span>: {
+    <span class="k">"summary"</span>: <span class="s">"Cogent Labs announced Maya Okafor as VP Engineering,</span>
+              <span class="s">previously Director of Infrastructure at Stripe."</span>,
+    <span class="k">"basis"</span>: [
+      { <span class="k">"citation"</span>: <span class="s">"cogent.ai/blog/welcoming-maya"</span>, <span class="k">"confidence"</span>: <span class="n">0.99</span> },
+      { <span class="k">"citation"</span>: <span class="s">"linkedin.com/in/mayaokafor"</span>,        <span class="k">"confidence"</span>: <span class="n">0.97</span> }
+    ]
+  }
+}</pre>
+    <div class="handoff"><strong>Handoff →</strong> Webhook fires. Pipeline resumes. Stage 4 grounds the outreach in citations from the public surface before the SDR's coffee is cold.</div>
+  </div>
+
+  <!-- ─── The trigger inflection ─── -->
+  <div class="trigger">
+    <div class="trigger-tag">⚡ Trigger fires</div>
+    <p>Wednesday 09:14 PT. Cogent Labs' watcher flips. Maya Okafor is the new VPE. The agent has six minutes before the SDR's coffee meeting ends.</p>
+    <small>monitor.event=ev_7Wgr…3qC · pipeline resume · t+0.0s</small>
+  </div>
+
+  <!-- ─── Stage 4: PERCEIVE / Search ─── -->
+  <div class="stage">
+    <div class="stage-num">Stage 04</div>
+    <h3 class="stage-title">Ground the outreach</h3>
+    <div class="stage-sub">
+      <span class="pill">Perceive</span><span>Search API · mode=advanced</span>
+      <span class="elapsed" style="float:right;">⏱ 4.8s · 3 grounded hooks</span>
+    </div>
+    <p class="stage-why">The agent does not need ten blue links about Maya Okafor. It needs three specific facts that an SDR can paste into an email without copying anything that isn't cited. Stage 4 is a precision query, not a research session.</p>
+
+    <div class="code-label">Request — one objective, three keyword queries</div>
+<pre><span class="method">POST</span> <span class="endpoint">https://api.parallel.ai/v1/search</span>
+{
+  <span class="k">"objective"</span>: <span class="s">"Three specific, citable facts about Maya Okafor</span>
+                <span class="s">that would be useful for a same-day intro</span>
+                <span class="s">about agent infrastructure, retrieval, or DX."</span>,
+  <span class="k">"queries"</span>: [
+    <span class="s">"Maya Okafor Stripe infrastructure director"</span>,
+    <span class="s">"Maya Okafor public talks conference"</span>,
+    <span class="s">"Maya Okafor opinions agent retrieval"</span>
+  ],
+  <span class="k">"max_results"</span>: <span class="n">3</span>,
+  <span class="k">"mode"</span>: <span class="s">"advanced"</span>
+}</pre>
+
+    <div class="code-label">Response — three excerpts, each cited</div>
+<pre>{
+  <span class="k">"results"</span>: [
+    {
+      <span class="k">"excerpt"</span>: <span class="s">"... Okafor led the team that rebuilt Stripe's idempotency-key</span>
+                  <span class="s">infra in 2024, a project credited with cutting duplicate-charge</span>
+                  <span class="s">incidents by 78% ..."</span>,
+      <span class="k">"citation"</span>: <span class="s">"stripe.com/blog/idempotency-2024"</span>,
+      <span class="k">"confidence"</span>: <span class="n">0.97</span>
+    },
+    {
+      <span class="k">"excerpt"</span>: <span class="s">"... 'Retrieval is the rate-limit on what agents can do safely'</span>
+                  <span class="s">— Maya Okafor, AI Engineer Summit, Oct 2025 ..."</span>,
+      <span class="k">"citation"</span>: <span class="s">"aiengineer.com/talks/okafor-2025"</span>,
+      <span class="k">"confidence"</span>: <span class="n">0.93</span>
+    },
+    {
+      <span class="k">"excerpt"</span>: <span class="s">"... in a recent post, Okafor argued that 'the infra layer for</span>
+                  <span class="s">agents is missing a primitive: cited, confidence-scored</span>
+                  <span class="s">retrieval' ..."</span>,
+      <span class="k">"citation"</span>: <span class="s">"okafor.substack.com/p/agent-infra-2026"</span>,
+      <span class="k">"confidence"</span>: <span class="n">0.91</span>
+    }
+  ]
+}</pre>
+    <div class="handoff"><strong>Handoff →</strong> Three excerpts, each with a citation and a confidence score, ready to compose into outreach. No fact in the email lacks a footnote.</div>
+  </div>
+
+  <!-- ─── The final artifact ─── -->
+  <h2 class="section">The Output · A Same-Day Outreach</h2>
+
+  <div class="artifact">
+    <div class="artifact-meta">
+      <span>From:</span> sdr@example.com<br />
+      <span>To:</span> maya@cogent.ai<br />
+      <span>Subject:</span> idempotency, but for agents<br />
+      <span>Sent:</span> Wed 09:21 PT &nbsp; <span style="color: var(--good);">· 7m after trigger</span>
+    </div>
+    <div class="artifact-body">
+      <p>Hi Maya — congratulations on the move to Cogent.<a href="#cite-1" class="cite">¹</a></p>
+      <p>The Stripe idempotency rebuild was one of those projects that quietly fixed a category of failure most teams hadn't articulated yet — cutting duplicate-charge incidents 78% is the kind of number that's easy to overlook because it shouldn't have happened in the first place.<a href="#cite-2" class="cite">²</a></p>
+      <p>Your line at AI Engineer Summit about retrieval being the rate-limit on what agents can safely do<a href="#cite-3" class="cite">³</a> — and your Substack argument that the infra layer is missing a primitive for cited, confidence-scored retrieval<a href="#cite-4" class="cite">⁴</a> — is the same idea we've been pulling on. Would love 15 minutes to compare notes on what Cogent is building.</p>
+      <p>— [SDR name]</p>
+    </div>
+    <div class="citations">
+      <ol>
+        <li id="cite-1"><span class="src">cogent.ai/blog/welcoming-maya</span><span class="conf">conf 0.99</span></li>
+        <li id="cite-2"><span class="src">stripe.com/blog/idempotency-2024</span><span class="conf">conf 0.97</span></li>
+        <li id="cite-3"><span class="src">aiengineer.com/talks/okafor-2025</span><span class="conf">conf 0.93</span></li>
+        <li id="cite-4"><span class="src">okafor.substack.com/p/agent-infra-2026</span><span class="conf">conf 0.91</span></li>
+      </ol>
+    </div>
+  </div>
+
+  <!-- ─── Takeaways ─── -->
+  <div class="takeaways">
+    <div class="takeaways-label">What this workflow demonstrates</div>
+    <ul>
+      <li><strong>Five primitives, four APIs, one job.</strong> The essay argued web infrastructure for agents has five primitives. The workflow is what those primitives look like wired together &mdash; not as a demo, as a system.</li>
+      <li><strong>Confidence routes the work.</strong> Stage 2 holds low-confidence enrichments for review without re-running the rest. Stage 3 only watches the entity-fields the agent is most sure about. Calibrated confidence is not a feature; it is the schedule.</li>
+      <li><strong>The schema is the contract.</strong> Every stage either consumes a typed input or produces a typed output. Nothing in this pipeline is "look at the search results and figure it out." The handoff between stages is what makes the workflow composable rather than fragile.</li>
+      <li><strong>Citations are the audit trail.</strong> Four facts in the final email, four citations in the artifact, four confidence scores attached. The SDR can paste the citations back in if a prospect asks where a claim came from. That is what production-grade web data feels like in the hand.</li>
+    </ul>
+  </div>
+
+  <div class="closer">
+    <p>Read next: <a href="../battlecard/">The Battlecard</a> &mdash; the four loudest APIs in the category, audited on the claim. And back to <a href="../essay/">The Essay</a> for the category frame this workflow is built on.</p>
+  </div>
+
+  <footer class="essay">
+    <p>By <a href="https://kevin.energy">Kevin Nguyen</a>. Written in May 2026 while preparing for a Technical Product Marketing Manager interview at <a href="https://parallel.ai">Parallel Web Systems</a>. Source on <a href="https://github.com/kevinnguyen805/parallel-tpmm-demos">GitHub</a>.</p>
+  </footer>
+
+</div>
+</body>
+</html>
