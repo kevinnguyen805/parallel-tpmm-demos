@@ -198,6 +198,23 @@
   }
   .fig-caption span.fig-num { color: var(--cobalt); }
 
+  /* Standalone figures (Pareto + scorecard) */
+  figure.diagram {
+    margin: 2.5rem 0 0.5rem;
+    max-width: 100%;
+  }
+  figure.diagram svg { display: block; width: 100%; height: auto; }
+  figcaption {
+    margin: 0.85rem 0 2.5rem;
+    font-family: var(--mono);
+    font-size: 0.625rem;
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+    color: var(--marg);
+    text-align: center;
+  }
+  figcaption span.fig-num { color: var(--cobalt); }
+
   /* Dimensions — no card; numbered eyebrow + H3 + prose */
   .dim-eyebrow {
     font-family: var(--mono); font-size: 0.625rem;
@@ -411,6 +428,116 @@
         </table>
       </div>
       <div class="fig-caption"><span class="fig-num">FIG_001</span> &nbsp; The Audit at a Glance · Kevin Nguyen © 2026</div>
+
+      <figure class="diagram">
+        <svg viewBox="0 0 720 420" xmlns="http://www.w3.org/2000/svg" aria-label="Scatter plot of BrowseComp accuracy vs cost per 1000 queries. Parallel's three processors form a monotonic Pareto frontier; Exa and Perplexity sit well inside the frontier.">
+          <defs>
+            <style>
+              .ax-line   { stroke: rgba(0,0,0,0.40); stroke-width: 1; fill: none; }
+              .ax-tick   { stroke: rgba(0,0,0,0.25); stroke-width: 1; fill: none; }
+              .ax-grid   { stroke: rgba(0,0,0,0.08); stroke-width: 1; stroke-dasharray: 1 3; fill: none; }
+              .ax-label  { font-family: "Departure Mono","JetBrains Mono",ui-monospace,monospace; font-size: 9px; fill: rgba(0,0,0,0.55); letter-spacing: 0.06em; }
+              .ax-title  { font-family: "Departure Mono","JetBrains Mono",ui-monospace,monospace; font-size: 9px; fill: rgba(0,0,0,0.55); letter-spacing: 0.16em; text-transform: uppercase; }
+              .ref-line  { stroke: rgba(0,0,0,0.30); stroke-width: 1; stroke-dasharray: 4 3; fill: none; }
+              .ref-label { font-family: "Departure Mono","JetBrains Mono",ui-monospace,monospace; font-size: 8.5px; fill: rgba(0,0,0,0.55); letter-spacing: 0.08em; text-transform: uppercase; }
+              .frontier  { stroke: #0a3bd6; stroke-width: 1.5; fill: none; }
+              .pt-fill   { fill: #0a3bd6; }
+              .pt-open   { fill: #fff; stroke: rgba(0,0,0,0.50); stroke-width: 1.25; }
+              .pt-ghost  { fill: rgba(10,59,214,0.12); stroke: rgba(10,59,214,0.45); stroke-width: 1; stroke-dasharray: 2 2; }
+              .pt-label  { font-family: "New York","Newsreader",Georgia,serif; font-size: 11px; font-style: italic; fill: #181b23; }
+              .pt-sub    { font-family: "Departure Mono","JetBrains Mono",ui-monospace,monospace; font-size: 9px; fill: rgba(0,0,0,0.55); letter-spacing: 0.06em; }
+              .pt-mark   { font-family: "Departure Mono","JetBrains Mono",ui-monospace,monospace; font-size: 9px; fill: #0a3bd6; letter-spacing: 0.08em; }
+            </style>
+          </defs>
+
+          <!-- Title -->
+          <text class="ax-title" x="360" y="20" text-anchor="middle">Accuracy vs Cost · BrowseComp 100-question subset</text>
+
+          <!-- Y axis ticks + gridlines (10, 20, 30, 40, 50) -->
+          <line class="ax-grid" x1="60" y1="296" x2="680" y2="296" />
+          <line class="ax-grid" x1="60" y1="241" x2="680" y2="241" />
+          <line class="ax-grid" x1="60" y1="187" x2="680" y2="187" />
+          <line class="ax-grid" x1="60" y1="132" x2="680" y2="132" />
+          <line class="ax-grid" x1="60" y1="78"  x2="680" y2="78" />
+
+          <text class="ax-label" x="52" y="350" text-anchor="end">0%</text>
+          <text class="ax-label" x="52" y="299" text-anchor="end">10</text>
+          <text class="ax-label" x="52" y="244" text-anchor="end">20</text>
+          <text class="ax-label" x="52" y="190" text-anchor="end">30</text>
+          <text class="ax-label" x="52" y="135" text-anchor="end">40</text>
+          <text class="ax-label" x="52" y="81"  text-anchor="end">50</text>
+          <text class="ax-title" x="22" y="200" text-anchor="middle" transform="rotate(-90 22 200)">BrowseComp accuracy →</text>
+
+          <!-- X axis ticks (0, 300, 600, 900, 1200) -->
+          <line class="ax-tick" x1="60"  y1="350" x2="60"  y2="354" />
+          <line class="ax-tick" x1="203" y1="350" x2="203" y2="354" />
+          <line class="ax-tick" x1="346" y1="350" x2="346" y2="354" />
+          <line class="ax-tick" x1="489" y1="350" x2="489" y2="354" />
+          <line class="ax-tick" x1="632" y1="350" x2="632" y2="354" />
+
+          <text class="ax-label" x="60"  y="368" text-anchor="middle">$0</text>
+          <text class="ax-label" x="203" y="368" text-anchor="middle">$300</text>
+          <text class="ax-label" x="346" y="368" text-anchor="middle">$600</text>
+          <text class="ax-label" x="489" y="368" text-anchor="middle">$900</text>
+          <text class="ax-label" x="632" y="368" text-anchor="middle">$1,200</text>
+          <text class="ax-title" x="360" y="395" text-anchor="middle">Cost per 1,000 queries (USD) →</text>
+
+          <!-- Plot axes -->
+          <line class="ax-line" x1="60" y1="50"  x2="60"  y2="350" />
+          <line class="ax-line" x1="60" y1="350" x2="680" y2="350" />
+
+          <!-- Human baseline reference line (≈ 25%) -->
+          <line class="ref-line" x1="60" y1="214" x2="680" y2="214" />
+          <text class="ref-label" x="673" y="208" text-anchor="end">human experts ≈ 25%</text>
+
+          <!-- OpenAI Deep Research ghost reference (51.5%, off-chart cost) -->
+          <circle class="pt-ghost" cx="670" cy="69" r="6" />
+          <text class="pt-sub" x="660" y="65" text-anchor="end">OpenAI DR · 51.5%</text>
+          <text class="pt-sub" x="660" y="76" text-anchor="end" style="font-size: 7.5px;">(not API-available)</text>
+
+          <!-- Pareto frontier line — Parallel's three points connected -->
+          <polyline class="frontier" points="203,203 346,137 632,88" />
+
+          <!-- Pareto frontier label -->
+          <text class="pt-mark" x="500" y="105" text-anchor="middle">Parallel's Pareto frontier</text>
+
+          <!-- DATA POINTS -->
+
+          <!-- Parallel Ultra ($300, 27%) -->
+          <circle class="pt-fill" cx="203" cy="203" r="5.5" />
+          <text class="pt-label" x="215" y="207">Parallel Ultra</text>
+          <text class="pt-sub"   x="215" y="220">$300 · 27%</text>
+
+          <!-- Parallel 600 ($600, 39%) -->
+          <circle class="pt-fill" cx="346" cy="137" r="5.5" />
+          <text class="pt-label" x="358" y="141">Parallel 600</text>
+          <text class="pt-sub"   x="358" y="154">$600 · 39%</text>
+
+          <!-- Parallel 1200 ($1200, 48%) -->
+          <circle class="pt-fill" cx="632" cy="88" r="5.5" />
+          <text class="pt-label" x="623" y="78" text-anchor="end">Parallel 1200</text>
+          <text class="pt-sub"   x="623" y="65" text-anchor="end">$1,200 · 48%</text>
+
+          <!-- Exa Research ($275, 14%) — open circle, inside frontier -->
+          <circle class="pt-open" cx="191" cy="274" r="5.5" />
+          <text class="pt-label" x="180" y="278" text-anchor="end">Exa Research</text>
+          <text class="pt-sub"   x="180" y="291" text-anchor="end">$275 · 14%</text>
+
+          <!-- Perplexity Deep Research ($880, 8%) — open circle -->
+          <circle class="pt-open" cx="480" cy="306" r="5.5" />
+          <text class="pt-label" x="492" y="310">Perplexity Deep Research</text>
+          <text class="pt-sub"   x="492" y="323">$880 · 8%</text>
+
+          <!-- Legend -->
+          <g transform="translate(70, 50)">
+            <circle class="pt-fill" cx="6" cy="6" r="4" />
+            <text class="pt-sub" x="16" y="9">Parallel processors</text>
+            <circle class="pt-open" cx="6" cy="22" r="4" />
+            <text class="pt-sub" x="16" y="25">Competitor APIs</text>
+          </g>
+        </svg>
+        <figcaption><span class="fig-num">FIG_002</span> &nbsp; Accuracy vs cost · BrowseComp 100-question subset · Kevin Nguyen © 2026</figcaption>
+      </figure>
 
       <h2>The Six Dimensions That Matter</h2>
 

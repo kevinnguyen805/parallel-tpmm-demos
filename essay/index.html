@@ -292,6 +292,88 @@
 
       <p>This is the same relationship application code had with payments before Stripe, or with email before Resend. Useful. Not yet load-bearing.</p>
 
+      <figure class="diagram">
+        <svg viewBox="0 0 720 360" xmlns="http://www.w3.org/2000/svg" aria-label="Comparison of two API outputs side by side. Left panel shows a snippet-era response: prose text from a URL. Right panel shows infrastructure response: typed JSON with per-field citations and confidence.">
+          <defs>
+            <style>
+              .panel-rect { fill: #fff; stroke: rgba(0,0,0,0.18); stroke-width: 1; }
+              .panel-rect.right { stroke: #0a3bd6; }
+              .panel-head { font-family: "Departure Mono","JetBrains Mono",ui-monospace,monospace; font-size: 9.5px; fill: #0a3bd6; letter-spacing: 0.16em; text-transform: uppercase; }
+              .panel-sub  { font-family: "Departure Mono","JetBrains Mono",ui-monospace,monospace; font-size: 8.5px; fill: rgba(0,0,0,0.55); letter-spacing: 0.10em; text-transform: uppercase; }
+              .prose-line { font-family: "New York","Newsreader",Georgia,serif; font-size: 11px; fill: #181b23; }
+              .prose-cite { font-family: "Departure Mono","JetBrains Mono",ui-monospace,monospace; font-size: 9px; fill: rgba(0,0,0,0.50); letter-spacing: 0.06em; }
+              .code-key { font-family: "Departure Mono","JetBrains Mono",ui-monospace,monospace; font-size: 10px; fill: #0a3bd6; }
+              .code-val { font-family: "Departure Mono","JetBrains Mono",ui-monospace,monospace; font-size: 10px; fill: #181b23; }
+              .code-meta { font-family: "Departure Mono","JetBrains Mono",ui-monospace,monospace; font-size: 9px; fill: rgba(0,0,0,0.50); }
+              .outcome { font-family: "New York","Newsreader",Georgia,serif; font-size: 10px; font-style: italic; fill: rgba(0,0,0,0.55); }
+              .outcome.win { fill: #0a3bd6; font-style: normal; font-family: "Departure Mono","JetBrains Mono",ui-monospace,monospace; font-size: 9px; letter-spacing: 0.12em; text-transform: uppercase; }
+              .div-arrow { stroke: rgba(0,0,0,0.45); stroke-width: 1; fill: none; }
+            </style>
+            <marker id="ar-essay2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+              <path d="M 0 0 L 10 5 L 0 10 z" fill="rgba(0,0,0,0.45)" />
+            </marker>
+          </defs>
+
+          <!-- ─── LEFT PANEL: SNIPPET-ERA ─── -->
+          <rect class="panel-rect" x="20" y="20" width="320" height="280" rx="2" />
+          <text class="panel-head" x="36" y="48">Snippet-era response</text>
+          <text class="panel-sub"  x="36" y="64">API returns prose for a human reader</text>
+
+          <line class="div-arrow" x1="36" y1="78" x2="324" y2="78" stroke="rgba(0,0,0,0.10)" stroke-width="1" />
+
+          <text class="prose-line" x="36" y="102">"... Sierra raised $950M in Series E</text>
+          <text class="prose-line" x="36" y="118">funding led by Tiger Global and GV at</text>
+          <text class="prose-line" x="36" y="134">a $15.8 billion valuation, bringing</text>
+          <text class="prose-line" x="36" y="150">total funding to over $1.4 billion ..."</text>
+
+          <text class="prose-cite" x="36" y="180">— techcrunch.com/sierra-raises-950m</text>
+
+          <line class="div-arrow" x1="36" y1="210" x2="324" y2="210" stroke="rgba(0,0,0,0.10)" stroke-width="1" />
+
+          <text class="panel-sub" x="36" y="232" style="text-transform: none; letter-spacing: 0;">No per-field structure.</text>
+          <text class="panel-sub" x="36" y="247" style="text-transform: none; letter-spacing: 0;">No confidence score.</text>
+          <text class="panel-sub" x="36" y="262" style="text-transform: none; letter-spacing: 0;">Citation at page level.</text>
+
+          <text class="outcome" x="180" y="288" text-anchor="middle">→ developer assembles the schema</text>
+
+          <!-- ─── RIGHT PANEL: INFRASTRUCTURE ─── -->
+          <rect class="panel-rect right" x="380" y="20" width="320" height="280" rx="2" />
+          <text class="panel-head" x="396" y="48">Infrastructure response</text>
+          <text class="panel-sub"  x="396" y="64">API returns typed data for an agent</text>
+
+          <line class="div-arrow" x1="396" y1="78" x2="684" y2="78" stroke="rgba(0,0,0,0.10)" stroke-width="1" />
+
+          <text class="code-val" x="396" y="100">{</text>
+          <text class="code-key" x="408" y="116">"valuation_usd"</text>
+          <text class="code-val" x="516" y="116">:</text>
+          <text class="code-val" x="524" y="116">15800000000</text>
+          <text class="code-meta" x="408" y="132">  ↳ cit: cnbc.com/bret-taylor-sierra</text>
+          <text class="code-meta" x="408" y="146">  ↳ conf: 0.98</text>
+          <text class="code-key" x="408" y="166">"round_lead"</text>
+          <text class="code-val" x="498" y="166">:</text>
+          <text class="code-val" x="506" y="166">"Tiger Global; GV"</text>
+          <text class="code-meta" x="408" y="182">  ↳ cit: techcrunch.com/sierra-...</text>
+          <text class="code-meta" x="408" y="196">  ↳ conf: 0.99</text>
+          <text class="code-val" x="396" y="216">}</text>
+
+          <line class="div-arrow" x1="396" y1="232" x2="684" y2="232" stroke="rgba(0,0,0,0.10)" stroke-width="1" />
+
+          <text class="panel-sub" x="396" y="253" style="text-transform: none; letter-spacing: 0;">Typed schema per field.</text>
+          <text class="panel-sub" x="396" y="268" style="text-transform: none; letter-spacing: 0;">Calibrated confidence per claim.</text>
+          <text class="panel-sub" x="396" y="283" style="text-transform: none; letter-spacing: 0;">Citation binds claim to passage.</text>
+
+          <!-- Outcome label for right panel (positioned outside the panel) -->
+          <text class="outcome win" x="540" y="324" text-anchor="middle">→ agent routes the work</text>
+
+          <!-- Caption strip below LEFT panel -->
+          <text class="outcome" x="180" y="324" text-anchor="middle" style="font-style: normal; font-family: 'Departure Mono','JetBrains Mono',ui-monospace,monospace; font-size: 9px; letter-spacing: 0.12em; text-transform: uppercase; fill: rgba(0,0,0,0.45);">→ cleanup downstream</text>
+
+          <!-- VS divider -->
+          <text class="prose-cite" x="360" y="160" text-anchor="middle" style="font-size: 14px; fill: rgba(0,0,0,0.20); letter-spacing: 0.16em;">vs</text>
+        </svg>
+        <figcaption><span class="fig-num">FIG_001</span> &nbsp; What the API actually returns · Kevin Nguyen © 2026</figcaption>
+      </figure>
+
       <h2>What Infrastructure Looks Like</h2>
 
       <p>If web infrastructure for agents is a real category, it has five primitives.</p>
@@ -358,7 +440,7 @@
           <line class="tie" x1="518" y1="104" x2="518" y2="158" />
           <line class="tie" x1="672" y1="104" x2="672" y2="158" />
         </svg>
-        <figcaption><span class="fig-num">FIG_001</span> &nbsp; The agent loop · Kevin Nguyen © 2026</figcaption>
+        <figcaption><span class="fig-num">FIG_002</span> &nbsp; The agent loop · five primitives + Basis · Kevin Nguyen © 2026</figcaption>
       </figure>
 
       <p>Each primitive is something an agent does on every meaningful task. Each one is something the snippet era leaves to the developer to assemble &mdash; usually by gluing together half a dozen tools, none of which know about each other, and none of which return their answers in a shape the next step can consume directly.</p>
@@ -368,6 +450,95 @@
       <p>Every infrastructure category in software has a boring primitive at its center that nobody asks for in user research but everyone ends up needing in production. For payments it was idempotency keys. For object storage it was eventual consistency guarantees. For databases it was the foreign-key constraint.</p>
 
       <p>For web infrastructure for agents, that primitive is <em>calibrated confidence per field</em>. Not a single confidence score on the whole response. A specific, evaluated, comparable number on every individual fact, attached to the citation that produced it.</p>
+
+      <figure class="diagram">
+        <svg viewBox="0 0 540 500" xmlns="http://www.w3.org/2000/svg" aria-label="Calibration plot. X-axis: stated confidence (0 to 1). Y-axis: observed accuracy (0 to 1). Diagonal line marks perfect calibration. Two example trajectories show a well-calibrated API hugging the diagonal versus an overconfident API consistently below it.">
+          <defs>
+            <style>
+              .cal-ax    { stroke: rgba(0,0,0,0.40); stroke-width: 1; fill: none; }
+              .cal-grid  { stroke: rgba(0,0,0,0.06); stroke-width: 1; stroke-dasharray: 1 3; fill: none; }
+              .cal-label { font-family: "Departure Mono","JetBrains Mono",ui-monospace,monospace; font-size: 9px; fill: rgba(0,0,0,0.55); letter-spacing: 0.06em; }
+              .cal-title { font-family: "Departure Mono","JetBrains Mono",ui-monospace,monospace; font-size: 9px; fill: rgba(0,0,0,0.55); letter-spacing: 0.16em; text-transform: uppercase; }
+              .cal-diag  { stroke: rgba(0,0,0,0.30); stroke-width: 1; stroke-dasharray: 3 3; fill: none; }
+              .cal-diag-label { font-family: "Departure Mono","JetBrains Mono",ui-monospace,monospace; font-size: 8.5px; fill: rgba(0,0,0,0.50); letter-spacing: 0.10em; text-transform: uppercase; }
+              .good-line { stroke: #0a3bd6; stroke-width: 1.5; fill: none; }
+              .good-pt   { fill: #0a3bd6; }
+              .bad-line  { stroke: rgba(0,0,0,0.45); stroke-width: 1.2; stroke-dasharray: 4 2; fill: none; }
+              .bad-pt    { fill: #fff; stroke: rgba(0,0,0,0.50); stroke-width: 1.25; }
+              .zone-label-good { font-family: "New York","Newsreader",Georgia,serif; font-size: 11px; font-style: italic; fill: #0a3bd6; }
+              .zone-label-bad  { font-family: "New York","Newsreader",Georgia,serif; font-size: 11px; font-style: italic; fill: rgba(0,0,0,0.55); }
+              .zone-sub { font-family: "Departure Mono","JetBrains Mono",ui-monospace,monospace; font-size: 8.5px; fill: rgba(0,0,0,0.50); letter-spacing: 0.06em; }
+            </style>
+          </defs>
+
+          <!-- Title -->
+          <text class="cal-title" x="270" y="22" text-anchor="middle">What "calibrated" means</text>
+
+          <!-- Plot area axes -->
+          <line class="cal-ax" x1="80" y1="60"  x2="80"  y2="420" />
+          <line class="cal-ax" x1="80" y1="420" x2="480" y2="420" />
+
+          <!-- Gridlines + ticks -->
+          <line class="cal-grid" x1="80" y1="330" x2="480" y2="330" />
+          <line class="cal-grid" x1="80" y1="240" x2="480" y2="240" />
+          <line class="cal-grid" x1="80" y1="150" x2="480" y2="150" />
+          <line class="cal-grid" x1="180" y1="60" x2="180" y2="420" />
+          <line class="cal-grid" x1="280" y1="60" x2="280" y2="420" />
+          <line class="cal-grid" x1="380" y1="60" x2="380" y2="420" />
+
+          <!-- Y tick labels -->
+          <text class="cal-label" x="72" y="424" text-anchor="end">0.0</text>
+          <text class="cal-label" x="72" y="333" text-anchor="end">0.25</text>
+          <text class="cal-label" x="72" y="243" text-anchor="end">0.5</text>
+          <text class="cal-label" x="72" y="153" text-anchor="end">0.75</text>
+          <text class="cal-label" x="72" y="63"  text-anchor="end">1.0</text>
+
+          <!-- X tick labels -->
+          <text class="cal-label" x="80"  y="438" text-anchor="middle">0.0</text>
+          <text class="cal-label" x="180" y="438" text-anchor="middle">0.25</text>
+          <text class="cal-label" x="280" y="438" text-anchor="middle">0.5</text>
+          <text class="cal-label" x="380" y="438" text-anchor="middle">0.75</text>
+          <text class="cal-label" x="480" y="438" text-anchor="middle">1.0</text>
+
+          <!-- Axis titles -->
+          <text class="cal-title" x="280" y="464" text-anchor="middle">Stated confidence →</text>
+          <text class="cal-title" x="34" y="240" text-anchor="middle" transform="rotate(-90 34 240)">Observed accuracy →</text>
+
+          <!-- Diagonal (perfect calibration) -->
+          <line class="cal-diag" x1="80" y1="420" x2="480" y2="60" />
+          <text class="cal-diag-label" x="305" y="216" text-anchor="middle" transform="rotate(-41.3 305 216)">perfect calibration</text>
+
+          <!-- WELL-CALIBRATED trajectory (close to diagonal) -->
+          <polyline class="good-line" points="360,171 400,128 420,118 440,103 460,85" />
+          <circle class="good-pt" cx="360" cy="171" r="3.5" />
+          <circle class="good-pt" cx="400" cy="128" r="3.5" />
+          <circle class="good-pt" cx="420" cy="118" r="3.5" />
+          <circle class="good-pt" cx="440" cy="103" r="3.5" />
+          <circle class="good-pt" cx="460" cy="85"  r="3.5" />
+
+          <!-- OVERCONFIDENT trajectory (below diagonal) -->
+          <polyline class="bad-line" points="280,294 360,258 420,222 440,204 460,186" />
+          <circle class="bad-pt" cx="280" cy="294" r="3.5" />
+          <circle class="bad-pt" cx="360" cy="258" r="3.5" />
+          <circle class="bad-pt" cx="420" cy="222" r="3.5" />
+          <circle class="bad-pt" cx="440" cy="204" r="3.5" />
+          <circle class="bad-pt" cx="460" cy="186" r="3.5" />
+
+          <!-- Annotations -->
+          <text class="zone-label-good" x="195" y="100">Well-calibrated</text>
+          <text class="zone-sub"        x="195" y="115">when the API says 0.9, the fact</text>
+          <text class="zone-sub"        x="195" y="128">is right ~90% of the time</text>
+
+          <text class="zone-label-bad" x="135" y="300">Overconfident</text>
+          <text class="zone-sub"       x="135" y="315">stated 0.9 → observed 0.6</text>
+          <text class="zone-sub"       x="135" y="328">(typical of snippet-era APIs)</text>
+
+          <!-- Connector lines from labels to data clusters -->
+          <line class="cal-grid" x1="265" y1="120" x2="358" y2="170" />
+          <line class="cal-grid" x1="220" y1="304" x2="278" y2="294" />
+        </svg>
+        <figcaption><span class="fig-num">FIG_003</span> &nbsp; What "calibrated confidence" means · Kevin Nguyen © 2026</figcaption>
+      </figure>
 
       <p>Confidence is what makes web data <em>measurable</em>, and measurable is what makes it shippable. With it, an agent can decide whether to escalate, re-query, or block its own action. Without it, every claim is the same claim, and every claim has to be either trusted blindly or audited manually. Most production teams pick neither and just lower their ambitions until the failures stop being noticeable.</p>
 

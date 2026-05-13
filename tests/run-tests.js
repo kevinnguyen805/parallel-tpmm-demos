@@ -96,18 +96,21 @@ test('feature: SVG diagram exists with viewBox', () => {
   assert(dims.length === 4 && dims.every(n => !isNaN(n)), `Malformed viewBox: ${svg[1]}`);
 });
 
-test('feature: SVG diagram contains all 5 stage labels', () => {
+test('feature: agent-loop SVG contains all 5 stage labels', () => {
   const html = read('essay/index.html');
-  const svgBlock = html.match(/<svg[\s\S]*?<\/svg>/)[0];
+  // Find the specific SVG that contains the agent loop (look for all 5 primitive labels in one SVG).
+  const svgs = html.match(/<svg[\s\S]*?<\/svg>/g) || [];
   const stages = ['Perceive', 'Read', 'Reason', 'Watch', 'Source'];
-  const missing = stages.filter(s => !new RegExp(`>${s}<`).test(svgBlock));
-  assert(missing.length === 0, `SVG missing stage labels: ${missing.join(', ')}`);
+  const agentLoopSvg = svgs.find(s => stages.every(p => new RegExp(`>${p}<`).test(s)));
+  assert(agentLoopSvg,
+    `No SVG contains all 5 stage labels [${stages.join(', ')}]; found ${svgs.length} SVGs total`);
 });
 
-test('feature: SVG diagram contains Basis trust-layer label', () => {
+test('feature: agent-loop SVG contains Basis trust-layer label', () => {
   const html = read('essay/index.html');
-  const svgBlock = html.match(/<svg[\s\S]*?<\/svg>/)[0];
-  assert(/Basis/.test(svgBlock), 'SVG diagram missing "Basis" trust-layer label');
+  const svgs = html.match(/<svg[\s\S]*?<\/svg>/g) || [];
+  const agentLoopSvg = svgs.find(s => /Perceive/.test(s) && /Basis/.test(s));
+  assert(agentLoopSvg, 'No agent-loop SVG with "Basis" trust-layer label found');
 });
 
 test('feature: essay describes all 5 primitives in copy (Perceive/Read/Reason/Watch/Source)', () => {
@@ -290,6 +293,54 @@ test('design: pages use paper-sheet container (.sheet) and prose max-width patte
     assert(/class="sheet"/.test(html), `${p} missing .sheet container`);
     assert(/class="prose"/.test(html), `${p} missing .prose inner column`);
   }
+});
+
+test('design: figures use FIG_NNN caption pattern with cobalt fig-num span', () => {
+  const pages = [
+    { path: 'essay/index.html',      minFigs: 3 },  // snippet/infra, agent-loop, calibration
+    { path: 'demo/index.html',       minFigs: 1 },  // pipeline overview
+    { path: 'battlecard/index.html', minFigs: 1 },  // Pareto plot (FIG_001 is the table caption, FIG_002 is Pareto)
+  ];
+  for (const { path, minFigs } of pages) {
+    const html = read(path);
+    const figCaptions = (html.match(/class="fig-num">FIG_\d{3}</g) || []).length;
+    assert(figCaptions >= minFigs,
+      `${path}: expected ≥${minFigs} FIG_NNN captions, found ${figCaptions}`);
+  }
+});
+
+test('design: essay contains snippet-vs-infrastructure comparison figure', () => {
+  const html = read('essay/index.html');
+  const svgs = html.match(/<svg[\s\S]*?<\/svg>/g) || [];
+  // Look for the SVG with the side-by-side "Snippet-era response" vs "Infrastructure response" panels.
+  const comparisonSvg = svgs.find(s => /Snippet-era response/i.test(s) && /Infrastructure response/i.test(s));
+  assert(comparisonSvg, 'Essay missing FIG_001 snippet-vs-infrastructure comparison SVG');
+});
+
+test('design: essay contains calibration plot figure', () => {
+  const html = read('essay/index.html');
+  const svgs = html.match(/<svg[\s\S]*?<\/svg>/g) || [];
+  const calibrationSvg = svgs.find(s => /perfect calibration/i.test(s) && /Stated confidence/i.test(s));
+  assert(calibrationSvg, 'Essay missing FIG_003 calibration plot SVG');
+});
+
+test('design: demo contains pipeline-overview figure with all 4 API names', () => {
+  const html = read('demo/index.html');
+  const svgs = html.match(/<svg[\s\S]*?<\/svg>/g) || [];
+  const apis = ['FindAll', 'Task', 'Monitor', 'Search'];
+  const pipelineSvg = svgs.find(s => apis.every(a => s.includes(a)));
+  assert(pipelineSvg, `Demo missing pipeline-overview SVG (expected all of [${apis.join(', ')}])`);
+});
+
+test('design: battlecard contains Pareto plot with 5 data points', () => {
+  const html = read('battlecard/index.html');
+  const svgs = html.match(/<svg[\s\S]*?<\/svg>/g) || [];
+  const paretoSvg = svgs.find(s => /Pareto/i.test(s) || /BrowseComp/.test(s));
+  assert(paretoSvg, 'Battlecard missing Pareto plot SVG');
+  // Count the <circle> elements that look like data points (r >= 3).
+  const dataPoints = (paretoSvg.match(/<circle[^>]*r="(?:[3-9]|\d{2,})/g) || []).length;
+  assert(dataPoints >= 5,
+    `Pareto plot should have ≥5 data points (Parallel Ultra/600/1200, Exa, Perplexity); found ${dataPoints}`);
 });
 
 test('design: no orphan dark-theme tokens left over (#0a0a0b, #d4a574)', () => {

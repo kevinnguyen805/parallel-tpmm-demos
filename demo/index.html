@@ -157,6 +157,23 @@
     letter-spacing: 0.10em;
   }
 
+  /* Figures */
+  figure.diagram {
+    margin: 2.5rem 0 0.5rem;
+    max-width: 100%;
+  }
+  figure.diagram svg { display: block; width: 100%; height: auto; }
+  figcaption {
+    margin: 0.85rem 0 2rem;
+    font-family: var(--mono);
+    font-size: 0.625rem;
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+    color: var(--marg);
+    text-align: center;
+  }
+  figcaption span.fig-num { color: var(--cobalt); }
+
   /* Code blocks */
   .code-label {
     font-family: var(--mono); font-size: 0.625rem;
@@ -377,6 +394,108 @@
       <p>What follows is the trace of one run of that pipeline, against one real public event, across four Parallel APIs. The shape of each API call is reproduced verbatim; the outputs reconstruct what an agent built on this stack would have produced on the morning of May 4, 2026.</p>
 
       <h2>The Pipeline · Four APIs, One Loop</h2>
+
+      <figure class="diagram">
+        <svg viewBox="0 0 720 300" xmlns="http://www.w3.org/2000/svg" aria-label="The pipeline: five stages flowing left to right (FindAll, Task, Monitor, Search, Output) atop a Basis trust layer band.">
+          <defs>
+            <marker id="ar-demo1" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+              <path d="M 0 0 L 10 5 L 0 10 z" fill="rgba(0,0,0,0.45)" />
+            </marker>
+            <style>
+              .pl-box { fill: #fff; stroke: rgba(0,0,0,0.18); stroke-width: 1; }
+              .pl-num { font-family: "Departure Mono","JetBrains Mono",ui-monospace,monospace; font-size: 9px; font-weight: 500; fill: #0a3bd6; letter-spacing: 0.16em; text-transform: uppercase; }
+              .pl-api { font-family: "New York","Newsreader",Georgia,serif; font-size: 14px; font-weight: 500; font-style: italic; fill: #181b23; }
+              .pl-prim { font-family: "Departure Mono","JetBrains Mono",ui-monospace,monospace; font-size: 9px; fill: rgba(0,0,0,0.55); letter-spacing: 0.14em; text-transform: uppercase; }
+              .pl-conn { stroke: rgba(0,0,0,0.45); stroke-width: 1.1; fill: none; }
+              .pl-payload { font-family: "Departure Mono","JetBrains Mono",ui-monospace,monospace; font-size: 8.5px; fill: rgba(0,0,0,0.50); letter-spacing: 0.08em; text-transform: uppercase; }
+              .pl-basis-band { fill: rgba(10,59,214,0.05); stroke: rgba(10,59,214,0.45); stroke-width: 1; stroke-dasharray: 3 3; }
+              .pl-basis-label { font-family: "Departure Mono","JetBrains Mono",ui-monospace,monospace; font-size: 10px; font-weight: 600; fill: #0a3bd6; letter-spacing: 0.18em; text-transform: uppercase; }
+              .pl-basis-sub { font-family: "New York","Newsreader",Georgia,serif; font-size: 10px; font-style: italic; fill: rgba(0,0,0,0.55); }
+              .pl-tie { stroke: rgba(10,59,214,0.30); stroke-width: 1; stroke-dasharray: 2 4; }
+            </style>
+          </defs>
+
+          <!-- Section title -->
+          <text class="pl-prim" x="360" y="22" text-anchor="middle" style="letter-spacing: 0.2em;">From brief to outreach · one run</text>
+
+          <!-- Box 1 — FindAll -->
+          <g>
+            <rect class="pl-box" x="32"  y="50" width="110" height="100" rx="2" />
+            <text class="pl-num"  x="87"  y="68" text-anchor="middle">Stage 01</text>
+            <text class="pl-api"  x="87"  y="100" text-anchor="middle">FindAll</text>
+            <text class="pl-prim" x="87"  y="128" text-anchor="middle">Source</text>
+          </g>
+          <!-- Box 2 — Task -->
+          <g>
+            <rect class="pl-box" x="167" y="50" width="110" height="100" rx="2" />
+            <text class="pl-num"  x="222" y="68" text-anchor="middle">Stage 02</text>
+            <text class="pl-api"  x="222" y="100" text-anchor="middle">Task</text>
+            <text class="pl-prim" x="222" y="128" text-anchor="middle">Reason</text>
+          </g>
+          <!-- Box 3 — Monitor -->
+          <g>
+            <rect class="pl-box" x="302" y="50" width="110" height="100" rx="2" />
+            <text class="pl-num"  x="357" y="68" text-anchor="middle">Stage 03</text>
+            <text class="pl-api"  x="357" y="100" text-anchor="middle">Monitor</text>
+            <text class="pl-prim" x="357" y="128" text-anchor="middle">Watch</text>
+          </g>
+          <!-- Box 4 — Search -->
+          <g>
+            <rect class="pl-box" x="437" y="50" width="110" height="100" rx="2" />
+            <text class="pl-num"  x="492" y="68" text-anchor="middle">Stage 04</text>
+            <text class="pl-api"  x="492" y="100" text-anchor="middle">Search</text>
+            <text class="pl-prim" x="492" y="128" text-anchor="middle">Perceive</text>
+          </g>
+          <!-- Box 5 — Output -->
+          <g>
+            <rect class="pl-box" x="572" y="50" width="110" height="100" rx="2" stroke-dasharray="0" stroke="#0a3bd6" />
+            <text class="pl-num"  x="627" y="68" text-anchor="middle">Output</text>
+            <text class="pl-api"  x="627" y="100" text-anchor="middle">Letter</text>
+            <text class="pl-prim" x="627" y="128" text-anchor="middle">Same-day</text>
+          </g>
+
+          <!-- Connectors with arrowheads -->
+          <line class="pl-conn" x1="142" y1="100" x2="166" y2="100" marker-end="url(#ar-demo1)" />
+          <line class="pl-conn" x1="277" y1="100" x2="301" y2="100" marker-end="url(#ar-demo1)" />
+          <line class="pl-conn" x1="412" y1="100" x2="436" y2="100" marker-end="url(#ar-demo1)" />
+          <line class="pl-conn" x1="547" y1="100" x2="571" y2="100" marker-end="url(#ar-demo1)" />
+
+          <!-- Payload labels above each arrow -->
+          <text class="pl-payload" x="154" y="92"  text-anchor="middle">50 entities</text>
+          <text class="pl-payload" x="289" y="92"  text-anchor="middle">50 records</text>
+          <text class="pl-payload" x="424" y="92"  text-anchor="middle">trigger fires</text>
+          <text class="pl-payload" x="559" y="92"  text-anchor="middle">3 excerpts</text>
+
+          <!-- Confidence sub-labels under arrows -->
+          <text class="pl-payload" x="154" y="115" text-anchor="middle" style="font-size: 7.5px; opacity: 0.7;">conf ≥ 0.80</text>
+          <text class="pl-payload" x="289" y="115" text-anchor="middle" style="font-size: 7.5px; opacity: 0.7;">typed schema</text>
+          <text class="pl-payload" x="424" y="115" text-anchor="middle" style="font-size: 7.5px; opacity: 0.7;">webhook</text>
+          <text class="pl-payload" x="559" y="115" text-anchor="middle" style="font-size: 7.5px; opacity: 0.7;">+ citations</text>
+
+          <!-- Basis band -->
+          <rect class="pl-basis-band" x="32" y="190" width="650" height="58" rx="2" />
+          <text class="pl-basis-label" x="357" y="214" text-anchor="middle">Basis · the trust layer</text>
+          <text class="pl-basis-sub"   x="357" y="232" text-anchor="middle">per-field citations + calibrated confidence, across every stage</text>
+
+          <!-- Tie lines from each box to Basis band -->
+          <line class="pl-tie" x1="87"  y1="150" x2="87"  y2="190" />
+          <line class="pl-tie" x1="222" y1="150" x2="222" y2="190" />
+          <line class="pl-tie" x1="357" y1="150" x2="357" y2="190" />
+          <line class="pl-tie" x1="492" y1="150" x2="492" y2="190" />
+          <line class="pl-tie" x1="627" y1="150" x2="627" y2="190" />
+
+          <!-- Timing footer strip -->
+          <g>
+            <line x1="32" y1="278" x2="682" y2="278" stroke="rgba(0,0,0,0.10)" stroke-width="1" />
+            <text class="pl-payload" x="87"  y="293" text-anchor="middle">14.1s</text>
+            <text class="pl-payload" x="222" y="293" text-anchor="middle">2m 04s</text>
+            <text class="pl-payload" x="357" y="293" text-anchor="middle">standing</text>
+            <text class="pl-payload" x="492" y="293" text-anchor="middle">5.3s</text>
+            <text class="pl-payload" x="627" y="293" text-anchor="middle" style="fill: #0a3bd6;">7m total</text>
+          </g>
+        </svg>
+        <figcaption><span class="fig-num">FIG_001</span> &nbsp; The pipeline · 4 APIs + Basis · Kevin Nguyen © 2026</figcaption>
+      </figure>
 
       <span class="stage-eyebrow">Stage 01 · Source · FindAll API <span class="elapsed">⏱ 14.1s · 50 candidates</span></span>
       <h3>Source the watchlist</h3>
