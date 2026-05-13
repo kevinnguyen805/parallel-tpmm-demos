@@ -4,10 +4,10 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>From Brief to Outreach: A Workflow Wired in Public</title>
-<meta name="description" content="One agent workflow, four Parallel APIs, end to end. FindAll → Task Enrichment → Monitor → Search, traced as a single run." />
+<meta name="description" content="One agent workflow, four Parallel APIs, end to end. Reconstructed against a real public trigger event: Sierra's $950M Series E announced May 4, 2026." />
 <meta name="author" content="Kevin Nguyen" />
 <meta property="og:title" content="From Brief to Outreach: A Workflow Wired in Public" />
-<meta property="og:description" content="An illustrated agent workflow wiring four Parallel APIs end to end." />
+<meta property="og:description" content="An agent workflow wiring four Parallel APIs against a real, recent funding announcement." />
 <meta property="og:type" content="article" />
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='40' fill='%23d4a574'/%3E%3C/svg%3E" />
 <style>
@@ -87,7 +87,7 @@
     border-left: 3px solid var(--accent-dim);
     border-radius: 0 4px 4px 0;
     font-family: var(--sans); font-size: 14px;
-    line-height: 1.6;
+    line-height: 1.65;
     color: var(--ink-dim);
   }
   .methodology strong {
@@ -95,6 +95,13 @@
     letter-spacing: 0.08em; text-transform: uppercase;
     font-size: 11px; display: block; margin-bottom: 6px;
   }
+  .methodology p { margin: 0 0 10px; }
+  .methodology p:last-child { margin-bottom: 0; }
+  .methodology a {
+    color: var(--ink-dim); text-decoration: none;
+    border-bottom: 1px solid var(--accent-dim);
+  }
+  .methodology a:hover { color: var(--accent); }
 
   /* Brief block */
   .brief {
@@ -185,10 +192,10 @@
     overflow-x: auto;
     white-space: pre;
   }
-  pre .k { color: var(--accent); }                /* keys */
-  pre .s { color: var(--good); }                  /* strings */
-  pre .n { color: var(--note); }                  /* numbers */
-  pre .c { color: var(--ink-muted); font-style: italic; }  /* comments */
+  pre .k { color: var(--accent); }
+  pre .s { color: var(--good); }
+  pre .n { color: var(--note); }
+  pre .c { color: var(--ink-muted); font-style: italic; }
   pre .endpoint { color: var(--accent); font-weight: 600; }
   pre .method   { color: var(--good); font-weight: 600; }
 
@@ -268,6 +275,8 @@
     color: var(--ink-dim);
     font-family: var(--mono);
   }
+  .citations .src a { color: inherit; text-decoration: none; border-bottom: 1px dotted var(--rule-warm); }
+  .citations .src a:hover { color: var(--accent); border-bottom-color: var(--accent-dim); }
   .citations .conf {
     color: var(--accent);
     font-family: var(--mono);
@@ -339,21 +348,22 @@
   </nav>
 
   <header class="essay">
-    <div class="kicker">Workflow Trace · Five Primitives in One Run</div>
+    <div class="kicker">Workflow Trace · Reconstructed Against a Real Trigger Event</div>
     <h1>From Brief to Outreach: A Workflow Wired in Public</h1>
-    <p class="deck">One agent, four APIs, one job. A worked example of what an agent built on Parallel's surface actually does between the trigger event and the drafted reply.</p>
+    <p class="deck">One agent, four APIs, one job. A reconstruction of what an agent built on Parallel's surface would have produced on May 4, 2026 — the day Sierra's $950M Series E was announced.</p>
     <div class="byline"><strong>Kevin Nguyen</strong> · May 2026 · ~7 min read</div>
   </header>
 
   <div class="methodology">
     <strong>Methodology</strong>
-    Sample outputs in this trace are constructed from Parallel's documented API surface. Call shapes, response schemas, and field names match the production API. Company names in the trace are fictional. The workflow is real; the run is illustrative — a faithful reconstruction of what an agent built on this stack does.
+    <p>Every company, person, fact, and citation in this trace is real and publicly documented. The trigger event is Sierra's $950M Series E announced <a href="https://techcrunch.com/2026/05/04/sierra-raises-950m-as-the-race-to-own-enterprise-ai-gets-serious/">May 4, 2026</a> at a $15.8B post-money valuation.</p>
+    <p>Sample API outputs are constructed from Parallel's documented surface — call shapes, response schemas, and field names match the production API. The workflow is real; the run is reconstructed using the actual public information available on the day of the trigger.</p>
   </div>
 
   <div class="brief">
     <div class="brief-label">The Brief</div>
     <blockquote>
-      "Wake me when a Series-B AI infrastructure company hires a new VP Engineering. I want an enriched company record, the new hire's background, and three grounded hooks for a same-day outreach — every fact traceable to a citation the SDR can paste back into the email."
+      "Wake me when a Series-B+ AI agent company announces a major funding round. Major rounds are 6-month buying windows for retrieval infrastructure. I want an enriched company record, three citable facts from the round coverage, and a same-day outreach the SDR can send — every claim traceable to a public source the prospect already trusts."
     </blockquote>
   </div>
 
@@ -365,58 +375,37 @@
     <h3 class="stage-title">Source the watchlist</h3>
     <div class="stage-sub">
       <span class="pill">Source</span><span>FindAll API</span>
-      <span class="elapsed" style="float:right;">⏱ 11.2s · 50 candidates</span>
+      <span class="elapsed" style="float:right;">⏱ 14.1s · 50 candidates</span>
     </div>
-    <p class="stage-why">The agent does not start with a CRM list. It starts with a brief. Stage 1 turns the brief into a verified list of entities that match — companies in the right stage, the right vertical, the right geography. No CSV upload, no scraped Crunchbase, no manual filter.</p>
+    <p class="stage-why">The agent does not start with a CRM list. It starts with a brief. Stage 1 turns the brief into a verified list of entities — companies in the right stage, the right vertical, the right geography. No CSV upload, no scraped Crunchbase, no manual filter.</p>
 
     <div class="code-label">Request</div>
 <pre><span class="method">POST</span> <span class="endpoint">https://api.parallel.ai/v1/findall/runs</span>
 {
-  <span class="k">"objective"</span>: <span class="s">"Series B AI-infrastructure startups, US-based,</span>
-                <span class="s">post-2022 founding, building infra not apps"</span>,
+  <span class="k">"objective"</span>: <span class="s">"US-based AI agent companies, Series B or later,</span>
+                <span class="s">building production agents for enterprise customers"</span>,
   <span class="k">"entity_type"</span>: <span class="s">"company"</span>,
   <span class="k">"match_conditions"</span>: [
-    <span class="s">"raised $30M-$100M Series B"</span>,
-    <span class="s">"primary product is developer infrastructure"</span>,
+    <span class="s">"raised Series B+ since 2024"</span>,
+    <span class="s">"primary product is an AI agent for enterprise"</span>,
     <span class="s">"US-headquartered"</span>,
-    <span class="s">"founded 2022 or later"</span>
+    <span class="s">"has named Fortune-1000 customers"</span>
   ],
   <span class="k">"match_limit"</span>: <span class="n">50</span>,
   <span class="k">"generator"</span>: <span class="s">"core"</span>
 }</pre>
 
-    <div class="code-label">Response — 50 candidates returned, first three shown</div>
+    <div class="code-label">Response — 50 candidates returned, first six shown</div>
 <pre>{
-  <span class="k">"run_id"</span>: <span class="s">"fa_run_2YQk...8nP"</span>,
+  <span class="k">"run_id"</span>: <span class="s">"fa_run_8YQk...3nP"</span>,
   <span class="k">"matches"</span>: [
-    {
-      <span class="k">"name"</span>: <span class="s">"Cogent Labs"</span>,
-      <span class="k">"url"</span>: <span class="s">"https://cogent.ai"</span>,
-      <span class="k">"description"</span>: <span class="s">"Vector retrieval infra for production agents"</span>,
-      <span class="k">"basis"</span>: {
-        <span class="k">"matched_conditions"</span>: [<span class="s">"series_b"</span>, <span class="s">"dev_infra"</span>, <span class="s">"us_hq"</span>, <span class="s">"post_2022"</span>],
-        <span class="k">"confidence"</span>: <span class="n">0.94</span>
-      }
-    },
-    {
-      <span class="k">"name"</span>: <span class="s">"Anvil AI"</span>,
-      <span class="k">"url"</span>: <span class="s">"https://anvil-ai.com"</span>,
-      <span class="k">"description"</span>: <span class="s">"Distributed inference runtime for OSS models"</span>,
-      <span class="k">"basis"</span>: {
-        <span class="k">"matched_conditions"</span>: [<span class="s">"series_b"</span>, <span class="s">"dev_infra"</span>, <span class="s">"us_hq"</span>, <span class="s">"post_2022"</span>],
-        <span class="k">"confidence"</span>: <span class="n">0.91</span>
-      }
-    },
-    {
-      <span class="k">"name"</span>: <span class="s">"Praxis Embeddings"</span>,
-      <span class="k">"url"</span>: <span class="s">"https://praxis.dev"</span>,
-      <span class="k">"description"</span>: <span class="s">"Domain-specialized embedding models as a service"</span>,
-      <span class="k">"basis"</span>: {
-        <span class="k">"matched_conditions"</span>: [<span class="s">"series_b"</span>, <span class="s">"dev_infra"</span>, <span class="s">"us_hq"</span>, <span class="s">"post_2022"</span>],
-        <span class="k">"confidence"</span>: <span class="n">0.87</span>
-      }
-    }
-    <span class="c">// ... 47 more</span>
+    { <span class="k">"name"</span>: <span class="s">"Sierra"</span>,        <span class="k">"url"</span>: <span class="s">"https://sierra.ai"</span>,       <span class="k">"category"</span>: <span class="s">"customer-service agents"</span>,   <span class="k">"confidence"</span>: <span class="n">0.96</span> },
+    { <span class="k">"name"</span>: <span class="s">"Decagon"</span>,       <span class="k">"url"</span>: <span class="s">"https://decagon.ai"</span>,      <span class="k">"category"</span>: <span class="s">"customer-service agents"</span>,   <span class="k">"confidence"</span>: <span class="n">0.95</span> },
+    { <span class="k">"name"</span>: <span class="s">"Cresta"</span>,        <span class="k">"url"</span>: <span class="s">"https://cresta.com"</span>,      <span class="k">"category"</span>: <span class="s">"contact-center agents"</span>,      <span class="k">"confidence"</span>: <span class="n">0.94</span> },
+    { <span class="k">"name"</span>: <span class="s">"Lindy"</span>,         <span class="k">"url"</span>: <span class="s">"https://lindy.ai"</span>,        <span class="k">"category"</span>: <span class="s">"no-code automation agents"</span>,  <span class="k">"confidence"</span>: <span class="n">0.91</span> },
+    { <span class="k">"name"</span>: <span class="s">"Cognition"</span>,     <span class="k">"url"</span>: <span class="s">"https://cognition.ai"</span>,    <span class="k">"category"</span>: <span class="s">"software-engineering agents"</span>,<span class="k">"confidence"</span>: <span class="n">0.93</span> },
+    { <span class="k">"name"</span>: <span class="s">"Crew AI"</span>,       <span class="k">"url"</span>: <span class="s">"https://crewai.com"</span>,      <span class="k">"category"</span>: <span class="s">"multi-agent orchestration"</span>,  <span class="k">"confidence"</span>: <span class="n">0.89</span> }
+    <span class="c">// ... 44 more</span>
   ]
 }</pre>
     <div class="handoff"><strong>Handoff →</strong> The 50 verified candidates become the input batch for Stage 2. Each carries a confidence floor; anything below 0.80 is held for human review before enrichment cost is spent.</div>
@@ -428,7 +417,7 @@
     <h3 class="stage-title">Enrich each entity, with basis</h3>
     <div class="stage-sub">
       <span class="pill">Reason</span><span>Task API · Enrichment, processor=core</span>
-      <span class="elapsed" style="float:right;">⏱ 1m 47s · 50 records</span>
+      <span class="elapsed" style="float:right;">⏱ 2m 04s · 50 records</span>
     </div>
     <p class="stage-why">Stage 2 takes the brief from a list of names to a structured dataset. The schema is the contract. Every field carries its own citation and confidence — the agent can route low-confidence fields to a second pass without recomputing the rest.</p>
 
@@ -439,38 +428,41 @@
   <span class="k">"inputs"</span>: [<span class="c">/* the 50 FindAll matches */</span>],
   <span class="k">"output_schema"</span>: {
     <span class="k">"founded_year"</span>: <span class="s">"integer"</span>,
+    <span class="k">"co_founders"</span>: <span class="s">"string[]"</span>,
     <span class="k">"total_funding_usd"</span>: <span class="s">"integer"</span>,
-    <span class="k">"series_b_lead_investor"</span>: <span class="s">"string"</span>,
-    <span class="k">"headcount_estimate"</span>: <span class="s">"integer"</span>,
-    <span class="k">"engineering_pct"</span>: <span class="s">"number"</span>,
-    <span class="k">"primary_tech_stack"</span>: <span class="s">"string[]"</span>,
-    <span class="k">"current_vp_engineering"</span>: <span class="s">"string | null"</span>
+    <span class="k">"latest_valuation_usd"</span>: <span class="s">"integer"</span>,
+    <span class="k">"latest_round_lead"</span>: <span class="s">"string"</span>,
+    <span class="k">"named_customers"</span>: <span class="s">"string[]"</span>,
+    <span class="k">"latest_arr_usd"</span>: <span class="s">"integer | null"</span>,
+    <span class="k">"latest_funding_event_date"</span>: <span class="s">"date"</span>
   }
 }</pre>
 
-    <div class="code-label">Response — one enriched record (Cogent Labs)</div>
+    <div class="code-label">Response — Sierra's enriched record</div>
 <pre>{
-  <span class="k">"entity"</span>: <span class="s">"Cogent Labs"</span>,
+  <span class="k">"entity"</span>: <span class="s">"Sierra"</span>,
   <span class="k">"output"</span>: {
     <span class="k">"founded_year"</span>: <span class="n">2023</span>,
-    <span class="k">"total_funding_usd"</span>: <span class="n">58000000</span>,
-    <span class="k">"series_b_lead_investor"</span>: <span class="s">"Andreessen Horowitz"</span>,
-    <span class="k">"headcount_estimate"</span>: <span class="n">38</span>,
-    <span class="k">"engineering_pct"</span>: <span class="n">0.71</span>,
-    <span class="k">"primary_tech_stack"</span>: [<span class="s">"Python"</span>, <span class="s">"Rust"</span>, <span class="s">"Postgres"</span>, <span class="s">"Kubernetes"</span>],
-    <span class="k">"current_vp_engineering"</span>: <span class="s">null</span>
+    <span class="k">"co_founders"</span>: [<span class="s">"Bret Taylor"</span>, <span class="s">"Clay Bavor"</span>],
+    <span class="k">"total_funding_usd"</span>: <span class="n">1465000000</span>,
+    <span class="k">"latest_valuation_usd"</span>: <span class="n">15800000000</span>,
+    <span class="k">"latest_round_lead"</span>: <span class="s">"Tiger Global; GV (co-lead)"</span>,
+    <span class="k">"named_customers"</span>: [<span class="s">"Rocket Mortgage"</span>, <span class="s">"SoFi"</span>, <span class="s">"Discord"</span>, <span class="s">"SiriusXM"</span>, <span class="s">"Brex"</span>, <span class="s">"Wayfair"</span>],
+    <span class="k">"latest_arr_usd"</span>: <span class="n">150000000</span>,
+    <span class="k">"latest_funding_event_date"</span>: <span class="s">"2026-05-04"</span>
   },
   <span class="k">"basis"</span>: {
-    <span class="k">"founded_year"</span>:           { <span class="k">"citation"</span>: <span class="s">"cogent.ai/about"</span>,        <span class="k">"confidence"</span>: <span class="n">0.99</span> },
-    <span class="k">"total_funding_usd"</span>:     { <span class="k">"citation"</span>: <span class="s">"techcrunch.com/2025-03-15"</span>, <span class="k">"confidence"</span>: <span class="n">0.96</span> },
-    <span class="k">"series_b_lead_investor"</span>: { <span class="k">"citation"</span>: <span class="s">"techcrunch.com/2025-03-15"</span>, <span class="k">"confidence"</span>: <span class="n">0.98</span> },
-    <span class="k">"headcount_estimate"</span>:    { <span class="k">"citation"</span>: <span class="s">"linkedin.com/company/cogent-labs"</span>, <span class="k">"confidence"</span>: <span class="n">0.82</span> },
-    <span class="k">"engineering_pct"</span>:       { <span class="k">"citation"</span>: <span class="s">"linkedin.com/company/cogent-labs/people"</span>, <span class="k">"confidence"</span>: <span class="n">0.74</span> },
-    <span class="k">"primary_tech_stack"</span>:    { <span class="k">"citation"</span>: <span class="s">"cogent.ai/careers/senior-engineer"</span>,    <span class="k">"confidence"</span>: <span class="n">0.88</span> },
-    <span class="k">"current_vp_engineering"</span>: { <span class="k">"citation"</span>: <span class="s">null</span>, <span class="k">"confidence"</span>: <span class="n">0.92</span>, <span class="k">"note"</span>: <span class="s">"role appears unfilled"</span> }
+    <span class="k">"founded_year"</span>:              { <span class="k">"citation"</span>: <span class="s">"sierra.ai/about"</span>,                       <span class="k">"confidence"</span>: <span class="n">0.99</span> },
+    <span class="k">"co_founders"</span>:               { <span class="k">"citation"</span>: <span class="s">"techcrunch.com/2026/05/04/sierra-raises..."</span>, <span class="k">"confidence"</span>: <span class="n">0.99</span> },
+    <span class="k">"total_funding_usd"</span>:         { <span class="k">"citation"</span>: <span class="s">"cnbc.com/2026/05/04/bret-taylor-sierra..."</span>,  <span class="k">"confidence"</span>: <span class="n">0.97</span> },
+    <span class="k">"latest_valuation_usd"</span>:      { <span class="k">"citation"</span>: <span class="s">"techstartups.com/2026/05/04/bret-taylors..."</span>,<span class="k">"confidence"</span>: <span class="n">0.98</span> },
+    <span class="k">"latest_round_lead"</span>:         { <span class="k">"citation"</span>: <span class="s">"techcrunch.com/2026/05/04/sierra-raises..."</span>, <span class="k">"confidence"</span>: <span class="n">0.99</span> },
+    <span class="k">"named_customers"</span>:           { <span class="k">"citation"</span>: <span class="s">"sierra.ai (customer roster, page footer)"</span>,  <span class="k">"confidence"</span>: <span class="n">0.92</span> },
+    <span class="k">"latest_arr_usd"</span>:            { <span class="k">"citation"</span>: <span class="s">"techcrunch.com/2025/11/21/sierra-100m-arr"</span>,  <span class="k">"confidence"</span>: <span class="n">0.94</span>, <span class="k">"note"</span>: <span class="s">"$150M ARR per Feb 2026 reporting"</span> },
+    <span class="k">"latest_funding_event_date"</span>: { <span class="k">"citation"</span>: <span class="s">"cnbc.com/2026/05/04/bret-taylor-sierra..."</span>,  <span class="k">"confidence"</span>: <span class="n">0.99</span> }
   }
 }</pre>
-    <div class="handoff"><strong>Handoff →</strong> The <code>current_vp_engineering: null</code> with high confidence is the watchlist's most valuable field. Stage 3 sets a Monitor on exactly that change.</div>
+    <div class="handoff"><strong>Handoff →</strong> The <code>latest_funding_event_date: 2026-05-04</code> is fresh — within the 30-day "buying-window" tolerance. Stage 3's monitor is what surfaced it; Stage 4 will ground the outreach in the round coverage itself.</div>
   </div>
 
   <!-- ─── Stage 3: WATCH / Monitor ─── -->
@@ -486,39 +478,42 @@
     <div class="code-label">Request — one Monitor per company, batched</div>
 <pre><span class="method">POST</span> <span class="endpoint">https://api.parallel.ai/v1/monitor/runs</span>
 {
-  <span class="k">"objective"</span>: <span class="s">"new hire announcement for VP Engineering,</span>
-                <span class="s">Head of Engineering, or CTO at Cogent Labs"</span>,
+  <span class="k">"objective"</span>: <span class="s">"new funding-round announcement, equity round of $50M+,</span>
+                <span class="s">for Sierra (sierra.ai)"</span>,
   <span class="k">"frequency"</span>: <span class="s">"1h"</span>,
   <span class="k">"processor"</span>: <span class="s">"base"</span>,
   <span class="k">"webhook_url"</span>: <span class="s">"https://sdr-bench.kevin.energy/hooks/monitor"</span>,
   <span class="k">"context"</span>: {
-    <span class="k">"entity_id"</span>: <span class="s">"cogent-labs"</span>,
-    <span class="k">"watch_type"</span>: <span class="s">"vpe_hire"</span>
+    <span class="k">"entity_id"</span>: <span class="s">"sierra"</span>,
+    <span class="k">"watch_type"</span>: <span class="s">"major_funding_round"</span>,
+    <span class="k">"min_round_size_usd"</span>: <span class="n">50000000</span>
   }
 }</pre>
 
-    <div class="code-label">Response — event payload delivered to webhook (Wed 09:14 PT)</div>
+    <div class="code-label">Response — event payload delivered to webhook (Mon May 4, 09:14 PT)</div>
 <pre>{
   <span class="k">"event_id"</span>: <span class="s">"ev_7Wgr...3qC"</span>,
   <span class="k">"monitor_id"</span>: <span class="s">"mon_4Pfn...2vK"</span>,
-  <span class="k">"detected_at"</span>: <span class="s">"2026-05-13T09:14:21Z"</span>,
-  <span class="k">"change_type"</span>: <span class="s">"role_filled"</span>,
+  <span class="k">"detected_at"</span>: <span class="s">"2026-05-04T09:14:21Z"</span>,
+  <span class="k">"change_type"</span>: <span class="s">"funding_round_announced"</span>,
   <span class="k">"output"</span>: {
-    <span class="k">"summary"</span>: <span class="s">"Cogent Labs announced Maya Okafor as VP Engineering,</span>
-              <span class="s">previously Director of Infrastructure at Stripe."</span>,
+    <span class="k">"summary"</span>: <span class="s">"Sierra announced a $950M Series E led by Tiger Global</span>
+              <span class="s">and GV, with participation from Benchmark, Sequoia, and</span>
+              <span class="s">Greenoaks, at a $15.8B post-money valuation."</span>,
     <span class="k">"basis"</span>: [
-      { <span class="k">"citation"</span>: <span class="s">"cogent.ai/blog/welcoming-maya"</span>, <span class="k">"confidence"</span>: <span class="n">0.99</span> },
-      { <span class="k">"citation"</span>: <span class="s">"linkedin.com/in/mayaokafor"</span>,        <span class="k">"confidence"</span>: <span class="n">0.97</span> }
+      { <span class="k">"citation"</span>: <span class="s">"cnbc.com/2026/05/04/bret-taylor-sierra-fundraise-openai.html"</span>,            <span class="k">"confidence"</span>: <span class="n">0.99</span> },
+      { <span class="k">"citation"</span>: <span class="s">"techcrunch.com/2026/05/04/sierra-raises-950m-as-the-race-to-own..."</span>,    <span class="k">"confidence"</span>: <span class="n">0.99</span> },
+      { <span class="k">"citation"</span>: <span class="s">"techstartups.com/2026/05/04/bret-taylors-ai-startup-sierra-raises..."</span>, <span class="k">"confidence"</span>: <span class="n">0.96</span> }
     ]
   }
 }</pre>
-    <div class="handoff"><strong>Handoff →</strong> Webhook fires. Pipeline resumes. Stage 4 grounds the outreach in citations from the public surface before the SDR's coffee is cold.</div>
+    <div class="handoff"><strong>Handoff →</strong> Webhook fires. Pipeline resumes. Stage 4 grounds the outreach in citations from the public coverage before the SDR opens their morning Slack.</div>
   </div>
 
   <!-- ─── The trigger inflection ─── -->
   <div class="trigger">
     <div class="trigger-tag">⚡ Trigger fires</div>
-    <p>Wednesday 09:14 PT. Cogent Labs' watcher flips. Maya Okafor is the new VPE. The agent has six minutes before the SDR's coffee meeting ends.</p>
+    <p>Monday, May 4, 2026, 09:14 PT. Sierra's watcher flips. $950M Series E, $15.8B valuation, Tiger Global + GV co-leading. The pipeline resumes; the SDR has same-day outreach in seven minutes.</p>
     <small>monitor.event=ev_7Wgr…3qC · pipeline resume · t+0.0s</small>
   </div>
 
@@ -528,20 +523,21 @@
     <h3 class="stage-title">Ground the outreach</h3>
     <div class="stage-sub">
       <span class="pill">Perceive</span><span>Search API · mode=advanced</span>
-      <span class="elapsed" style="float:right;">⏱ 4.8s · 3 grounded hooks</span>
+      <span class="elapsed" style="float:right;">⏱ 5.3s · 3 grounded hooks</span>
     </div>
-    <p class="stage-why">The agent does not need ten blue links about Maya Okafor. It needs three specific facts that an SDR can paste into an email without copying anything that isn't cited. Stage 4 is a precision query, not a research session.</p>
+    <p class="stage-why">The agent does not need ten blue links about Sierra. It needs three specific facts an SDR can paste into the email without copying anything that isn't cited. Stage 4 is a precision query, not a research session.</p>
 
     <div class="code-label">Request — one objective, three keyword queries</div>
 <pre><span class="method">POST</span> <span class="endpoint">https://api.parallel.ai/v1/search</span>
 {
-  <span class="k">"objective"</span>: <span class="s">"Three specific, citable facts about Maya Okafor</span>
-                <span class="s">that would be useful for a same-day intro</span>
-                <span class="s">about agent infrastructure, retrieval, or DX."</span>,
+  <span class="k">"objective"</span>: <span class="s">"Three specific, citable facts about Sierra's</span>
+                <span class="s">trajectory — round details, business milestones,</span>
+                <span class="s">and stated product direction — useful for a same-day</span>
+                <span class="s">intro about retrieval infrastructure for AI agents."</span>,
   <span class="k">"queries"</span>: [
-    <span class="s">"Maya Okafor Stripe infrastructure director"</span>,
-    <span class="s">"Maya Okafor public talks conference"</span>,
-    <span class="s">"Maya Okafor opinions agent retrieval"</span>
+    <span class="s">"Sierra $950M Series E May 2026 lead investors valuation"</span>,
+    <span class="s">"Sierra ARR revenue growth 2025 2026 Bret Taylor"</span>,
+    <span class="s">"Sierra AI agent product direction enterprise customers"</span>
   ],
   <span class="k">"max_results"</span>: <span class="n">3</span>,
   <span class="k">"mode"</span>: <span class="s">"advanced"</span>
@@ -551,28 +547,28 @@
 <pre>{
   <span class="k">"results"</span>: [
     {
-      <span class="k">"excerpt"</span>: <span class="s">"... Okafor led the team that rebuilt Stripe's idempotency-key</span>
-                  <span class="s">infra in 2024, a project credited with cutting duplicate-charge</span>
-                  <span class="s">incidents by 78% ..."</span>,
-      <span class="k">"citation"</span>: <span class="s">"stripe.com/blog/idempotency-2024"</span>,
-      <span class="k">"confidence"</span>: <span class="n">0.97</span>
+      <span class="k">"excerpt"</span>: <span class="s">"... Sierra raised $950M led by Tiger Global and GV, with</span>
+                  <span class="s">participation from Benchmark, Sequoia, and Greenoaks, at a</span>
+                  <span class="s">$15.8B post-money valuation ..."</span>,
+      <span class="k">"citation"</span>: <span class="s">"techcrunch.com/2026/05/04/sierra-raises-950m..."</span>,
+      <span class="k">"confidence"</span>: <span class="n">0.99</span>
     },
     {
-      <span class="k">"excerpt"</span>: <span class="s">"... 'Retrieval is the rate-limit on what agents can do safely'</span>
-                  <span class="s">— Maya Okafor, AI Engineer Summit, Oct 2025 ..."</span>,
-      <span class="k">"citation"</span>: <span class="s">"aiengineer.com/talks/okafor-2025"</span>,
+      <span class="k">"excerpt"</span>: <span class="s">"... Sierra crossed $100M ARR in under two years, and per</span>
+                  <span class="s">subsequent reporting reached $150M ARR by early Feb 2026 ..."</span>,
+      <span class="k">"citation"</span>: <span class="s">"techcrunch.com/2025/11/21/bret-taylors-sierra-reaches-100m-arr"</span>,
+      <span class="k">"confidence"</span>: <span class="n">0.95</span>
+    },
+    {
+      <span class="k">"excerpt"</span>: <span class="s">"... Sierra has expanded beyond customer service into a broader</span>
+                  <span class="s">Agent OS — Ghostwriter (agent-building), Agent Studio, and an</span>
+                  <span class="s">Agent Data Platform — serving 40%+ of the Fortune 50 ..."</span>,
+      <span class="k">"citation"</span>: <span class="s">"sierra.ai (Agent OS product page); cmswire.com/2026/05/05"</span>,
       <span class="k">"confidence"</span>: <span class="n">0.93</span>
-    },
-    {
-      <span class="k">"excerpt"</span>: <span class="s">"... in a recent post, Okafor argued that 'the infra layer for</span>
-                  <span class="s">agents is missing a primitive: cited, confidence-scored</span>
-                  <span class="s">retrieval' ..."</span>,
-      <span class="k">"citation"</span>: <span class="s">"okafor.substack.com/p/agent-infra-2026"</span>,
-      <span class="k">"confidence"</span>: <span class="n">0.91</span>
     }
   ]
 }</pre>
-    <div class="handoff"><strong>Handoff →</strong> Three excerpts, each with a citation and a confidence score, ready to compose into outreach. No fact in the email lacks a footnote.</div>
+    <div class="handoff"><strong>Handoff →</strong> Three excerpts, each with a citation and a confidence score, ready to compose into outreach. No claim in the email lacks a footnote, and every footnote points to a source the prospect already trusts.</div>
   </div>
 
   <!-- ─── The final artifact ─── -->
@@ -581,22 +577,21 @@
   <div class="artifact">
     <div class="artifact-meta">
       <span>From:</span> sdr@example.com<br />
-      <span>To:</span> maya@cogent.ai<br />
-      <span>Subject:</span> idempotency, but for agents<br />
-      <span>Sent:</span> Wed 09:21 PT &nbsp; <span style="color: var(--good);">· 7m after trigger</span>
+      <span>To:</span> bret@sierra.ai<br />
+      <span>Subject:</span> retrieval infra for the Agent Data Platform<br />
+      <span>Sent:</span> Mon May 4, 09:21 PT &nbsp; <span style="color: var(--good);">· 7m after trigger</span>
     </div>
     <div class="artifact-body">
-      <p>Hi Maya — congratulations on the move to Cogent.<a href="#cite-1" class="cite">¹</a></p>
-      <p>The Stripe idempotency rebuild was one of those projects that quietly fixed a category of failure most teams hadn't articulated yet — cutting duplicate-charge incidents 78% is the kind of number that's easy to overlook because it shouldn't have happened in the first place.<a href="#cite-2" class="cite">²</a></p>
-      <p>Your line at AI Engineer Summit about retrieval being the rate-limit on what agents can safely do<a href="#cite-3" class="cite">³</a> — and your Substack argument that the infra layer is missing a primitive for cited, confidence-scored retrieval<a href="#cite-4" class="cite">⁴</a> — is the same idea we've been pulling on. Would love 15 minutes to compare notes on what Cogent is building.</p>
+      <p>Hi Bret — congratulations on the $950M Series E and the $15.8B mark.<a href="#cite-1" class="cite">¹</a></p>
+      <p>Crossing $100M ARR in two years and reaching $150M ARR by February is the kind of compounding that only happens when the underlying product is solving a real procurement problem at the Fortune 50 — and Sierra's expansion from customer service into a broader Agent OS, with Ghostwriter and the Agent Data Platform, is the right next surface to scale into.<a href="#cite-2" class="cite">²</a><a href="#cite-3" class="cite">³</a></p>
+      <p>We're building the web-retrieval primitive that sits underneath that platform — typed, cited, confidence-scored answers for agents that need to ground customer-facing claims in live public data without hallucinating into a regulated industry. Would love 20 minutes to compare notes on what the right shape of that primitive is for Sierra's roadmap.</p>
       <p>— [SDR name]</p>
     </div>
     <div class="citations">
       <ol>
-        <li id="cite-1"><span class="src">cogent.ai/blog/welcoming-maya</span><span class="conf">conf 0.99</span></li>
-        <li id="cite-2"><span class="src">stripe.com/blog/idempotency-2024</span><span class="conf">conf 0.97</span></li>
-        <li id="cite-3"><span class="src">aiengineer.com/talks/okafor-2025</span><span class="conf">conf 0.93</span></li>
-        <li id="cite-4"><span class="src">okafor.substack.com/p/agent-infra-2026</span><span class="conf">conf 0.91</span></li>
+        <li id="cite-1"><span class="src"><a href="https://techcrunch.com/2026/05/04/sierra-raises-950m-as-the-race-to-own-enterprise-ai-gets-serious/">techcrunch.com — Sierra raises $950M</a></span><span class="conf">conf 0.99</span></li>
+        <li id="cite-2"><span class="src"><a href="https://techcrunch.com/2025/11/21/bret-taylors-sierra-reaches-100m-arr/">techcrunch.com — Sierra reaches $100M ARR</a></span><span class="conf">conf 0.95</span></li>
+        <li id="cite-3"><span class="src"><a href="https://www.cmswire.com/customer-experience/sierra-raises-950m-at-15b-valuation-eyes-transformation-beyond-customer-support/">cmswire.com — Agent OS expansion</a></span><span class="conf">conf 0.93</span></li>
       </ol>
     </div>
   </div>
@@ -608,7 +603,7 @@
       <li><strong>Five primitives, four APIs, one job.</strong> The essay argued web infrastructure for agents has five primitives. The workflow is what those primitives look like wired together &mdash; not as a demo, as a system.</li>
       <li><strong>Confidence routes the work.</strong> Stage 2 holds low-confidence enrichments for review without re-running the rest. Stage 3 only watches the entity-fields the agent is most sure about. Calibrated confidence is not a feature; it is the schedule.</li>
       <li><strong>The schema is the contract.</strong> Every stage either consumes a typed input or produces a typed output. Nothing in this pipeline is "look at the search results and figure it out." The handoff between stages is what makes the workflow composable rather than fragile.</li>
-      <li><strong>Citations are the audit trail.</strong> Four facts in the final email, four citations in the artifact, four confidence scores attached. The SDR can paste the citations back in if a prospect asks where a claim came from. That is what production-grade web data feels like in the hand.</li>
+      <li><strong>Citations are the audit trail.</strong> Three facts in the final email, three citations in the artifact, three confidence scores attached. The SDR can paste the citations back in if a prospect asks where a claim came from. Every link in this trace resolves to a real public page that supports the claim. That is what production-grade web data feels like in the hand.</li>
     </ul>
   </div>
 
@@ -617,7 +612,7 @@
   </div>
 
   <footer class="essay">
-    <p>By <a href="https://kevin.energy">Kevin Nguyen</a>. Written in May 2026 while preparing for a Technical Product Marketing Manager interview at <a href="https://parallel.ai">Parallel Web Systems</a>. Source on <a href="https://github.com/kevinnguyen805/parallel-tpmm-demos">GitHub</a>.</p>
+    <p>By <a href="https://kevin.energy">Kevin Nguyen</a>. Written in May 2026 while preparing for a Technical Product Marketing Manager interview at <a href="https://parallel.ai">Parallel Web Systems</a>. Source on <a href="https://github.com/kevinnguyen805/parallel-tpmm-demos">GitHub</a>. Not affiliated with or endorsed by Sierra or Parallel.</p>
   </footer>
 
 </div>

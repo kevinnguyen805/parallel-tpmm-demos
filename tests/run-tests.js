@@ -144,8 +144,25 @@ test('unit: demo names all 4 Parallel APIs (FindAll, Task, Monitor, Search)', ()
 test('unit: demo has explicit methodology / sample-output disclosure', () => {
   const html = read('demo/index.html');
   assert(/Methodology/i.test(html), 'Missing Methodology block');
-  assert(/illustrative|reconstruction|fictional/i.test(html),
-    'Methodology must clearly disclose the illustrative / fictional nature of the trace');
+  // Accept any honest framing of how the API outputs were produced.
+  assert(/constructed|reconstruct|illustrat|sample/i.test(html),
+    'Methodology must clearly disclose how the API outputs were produced (constructed / reconstructed / illustrative / sample)');
+});
+
+test('unit: demo trigger event has at least 2 distinct news sources cited', () => {
+  const html = read('demo/index.html');
+  // Should cite the May 4 2026 event from multiple sources for triangulation.
+  const newsHosts = ['techcrunch.com', 'cnbc.com', 'techstartups.com', 'cmswire.com', 'theaiinsider.tech'];
+  const hits = newsHosts.filter(h => html.includes(h));
+  assert(hits.length >= 2,
+    `Trigger event should be cross-cited; found only ${hits.length} of expected news hosts: ${hits.join(', ')}`);
+});
+
+test('unit: demo names the real trigger company (Sierra) and its co-founders', () => {
+  const html = read('demo/index.html');
+  assert(/\bSierra\b/.test(html), 'Demo missing trigger company "Sierra"');
+  assert(/Bret Taylor/.test(html), 'Demo missing co-founder "Bret Taylor"');
+  assert(/Clay Bavor/.test(html), 'Demo missing co-founder "Clay Bavor"');
 });
 
 test('feature: demo has API request examples (POST + endpoint)', () => {
